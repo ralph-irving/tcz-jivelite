@@ -1,0 +1,32 @@
+!/bin/bash
+
+JIVELITE=jivelite
+TCZ=${HOME}/${JIVELITE}.tcz
+
+## Start
+
+echo "Building tcz"
+cd $HOME
+mkdir opt
+cp -pr /opt/jivelite opt
+
+if [ -f $TCZ ]; then
+	rm $TCZ
+fi
+
+cd /usr/lib/arm-linux-gnueabihf/
+tar -cf - libts-0.0.so* | (cd $HOME/opt/jivelite/lib; tar -xvf -)
+
+rm $HOME/opt/jivelite/bin/jivelite-sp
+cp -p tcz-jivelite/jivelite-sp $HOME/opt/jivelite/bin
+
+cd $HOME
+mkdir tcz
+mv opt tcz
+
+mksquashfs tcz $TCZ -all-root
+md5sum $TCZ > ${TCZ}.md5.txt
+
+cd $HOME
+rm -rf tcz
+

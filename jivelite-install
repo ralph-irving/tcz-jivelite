@@ -1,0 +1,21 @@
+#!/bin/bash
+cd /opt/jivelite || exit 1
+rm -rf bin
+rm -rf share
+rm -rf lib
+cd jivelite || exit 1
+mkdir -p /opt/jivelite/bin
+cp -p bin/jivelite /opt/jivelite/bin
+mkdir -p /opt/jivelite/lib
+cp -pr lib /opt/jivelite
+cp -pr share /opt/jivelite
+cd /opt/squeezeplay/lib
+tar -cf - libexpat.so* libfreetype.so* libjpeg.so* libpng.so* libpng12.so* libSDL_gfx.so* libSDL_image-1.2.so.* libSDL_ttf-2.0.so* libSDL-1.2.so* liblua.so | (cd /opt/jivelite/lib; tar -xvf -)
+cp -p squeezeplay/src/lua-5.1.1/src/{lua,luac} /opt/jivelite/bin
+cd /opt || exit 1
+find jivelite -type d -name '.svn' -exec rm -rf {} \;
+cd /opt/jivelite || exit 1
+find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
+find bin -type f -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
+find bin -type f -exec strip --strip-unneeded {} \;
+patch -p0 -ijivelite/scripts/remove-ffi.patch
