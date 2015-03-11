@@ -28,13 +28,26 @@ You need a keyboard to configure jivelite inititally and either a composite or h
 
 Here's the key map http://wiki.slimdevices.com/index.ph...Developers_FAQ
 
-It also works with a mouse or touchpad and should work with touch screens as well, but I don't have one to test that.
+It also works with a mouse or touchpad and should work with touch screens as well, if the screen uses the framebuffer devices like /dev/fb?.
 
 You can also use it with a flirc IR dongle and a squeezebox remote.
 
 https://flirc.tv/product/flirc/
 
-If you load the configuration file from the post below.  You'll need to load the flirc config from another computer.
+You'll need to load one of the flirc config from another computer.  Start with the fcfg in ralphy_jivelite_flirc_map.zip first and if you get multiple key presses for one press then try the other config in ralphy_jivelite_flirc_map_debounce.zip
+
+Both files are available in the repository.
+
+Not all the keys on the slimremote map 1-to-1, here are the exceptions.
+
+Sleep = Escape/Back
+Power = Power (Only from Now Playing screen)
+Favorites = Favorites
+Search = Current Track Info
+Browse = Music Library
+Now Playing = Now Playing
+Size = Stop
+Brightness = Playlists 
 
 http://forums.slimdevices.com/showthread.php?99395-Community-Squeeze-OS-F19-Release-1&p=768999&viewfull=1#post768999
 
