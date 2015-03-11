@@ -1,8 +1,48 @@
 # tcz-jivelite
 piCoPlayer /dev/fb jivelite.tcz
 
+Installation Instructions on piCorePlayer 1.19+
 
-Build squeezeplay
+Copy these two files to /mnt/mmcblk0p2/tce/optional on the piCorePlayer sd card.
+
+You might need to increase the size of the ext4 partition mmcblk0p2 depending on your free space.
+
+https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz
+
+https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz.md5.txt
+
+
+Add the following line to the end of /mnt/mmcblk0p2/tce/onboot.lst
+
+jivelite.tcz
+
+
+To start jivelite on boot add this line in one of the user command fields at the bottom of the tweaks webgui.
+
+/opt/jivelite/bin/jivelite-sp
+
+
+I've tested it on a B and B+.
+
+You need a keyboard to configure jivelite inititally and either a composite or hdmi monitor connected.
+
+Here's the key map http://wiki.slimdevices.com/index.ph...Developers_FAQ
+
+It also works with a mouse or touchpad and should work with touch screens as well, but I don't have one to test that.
+
+You can also use it with a flirc IR dongle and a squeezebox remote.
+
+https://flirc.tv/product/flirc/
+
+If you load the configuration file from the post below.  You'll need to load the flirc config from another computer.
+
+http://forums.slimdevices.com/showthread.php?99395-Community-Squeeze-OS-F19-Release-1&p=768999&viewfull=1#post768999
+
+
+
+Build instructions to recreate jivelite.tcz from scratch on raspbian 7.8.
+
+Compile squeezeplay
 
 git clone https://github.com/ralph-irving/squeezeplay
 
@@ -28,7 +68,7 @@ mkdir -p /opt/squeezeplay
 tar -C /opt/squeezeplay ../build/squeezeplay-7.8.0-.tgz
 
 
-Build jivelite
+Compile jivelite
 
 git clone https://github.com/ralph-irving/jivelite
 
