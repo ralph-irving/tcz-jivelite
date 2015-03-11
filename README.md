@@ -41,16 +41,20 @@ Both files are available in the repository.
 Not all the keys on the slimremote map 1-to-1, here are the exceptions.
 
 Sleep = Escape/Back
+
 Power = Power (Only from Now Playing screen)
+
 Favorites = Favorites
+
 Search = Current Track Info
+
 Browse = Music Library
+
 Now Playing = Now Playing
+
 Size = Stop
+
 Brightness = Playlists 
-
-http://forums.slimdevices.com/showthread.php?99395-Community-Squeeze-OS-F19-Release-1&p=768999&viewfull=1#post768999
-
 
 
 Build instructions to recreate jivelite.tcz from scratch on raspbian 7.8.
