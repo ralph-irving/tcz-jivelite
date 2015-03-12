@@ -1,7 +1,7 @@
 # tcz-jivelite
 piCoPlayer /dev/fb jivelite.tcz
 
-Installation Instructions on piCorePlayer 1.19+
+**Installation Instructions on piCorePlayer 1.19+**
 
 Copy these two files to /mnt/mmcblk0p2/tce/optional on the piCorePlayer sd card.
 
@@ -28,13 +28,15 @@ You need a keyboard to configure jivelite inititally and either a composite or h
 
 Here's the key map http://wiki.slimdevices.com/index.ph...Developers_FAQ
 
-It also works with a mouse or touchpad and should work with touch screens as well, if the screen uses the framebuffer devices like /dev/fb?.
+The Joggler and WQVGA Small Print Skins also work with a mouse or touchpad and should work with touch screens as well, if the screen uses the framebuffer devices like /dev/fb?.
 
-You can also use it with a flirc IR dongle and a squeezebox remote.
+Note that NONE of the HD Skins support a pointer or touch device.
+
+All the skins can be used with a flirc IR dongle and a squeezebox remote.
 
 https://flirc.tv/product/flirc/
 
-You'll need to load one of the flirc config from another computer.  Start with the fcfg in ralphy_jivelite_flirc_map.zip first and if you get multiple key presses for one press then try the other config in ralphy_jivelite_flirc_map_debounce.zip
+You'll need to load one of the flirc config from another computer.  Start with the fcfg in **ralphy_jivelite_flirc_map.zip** first and if you get multiple key presses for one press then try the other config in **ralphy_jivelite_flirc_map_debounce.zip**
 
 Both files are available in the repository.
 
@@ -44,20 +46,16 @@ Sleep = Escape/Back
 
 Power = Power (Only from Now Playing screen)
 
-Favorites = Favorites
-
 Search = Current Track Info
 
 Browse = Music Library
-
-Now Playing = Now Playing
 
 Size = Stop
 
 Brightness = Playlists 
 
 
-Build instructions to recreate jivelite.tcz from scratch on raspbian 7.8.
+**Build instructions to recreate jivelite.tcz from scratch on raspbian 7.8.**
 
 Compile squeezeplay
 
