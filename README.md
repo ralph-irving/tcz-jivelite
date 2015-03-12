@@ -24,11 +24,11 @@ To start jivelite on boot add this line in one of the user command fields at the
 
 I've tested it on a B and B+.
 
-You need a keyboard to configure jivelite inititally and either a composite or hdmi monitor connected.
+You need a keyboard to configure jivelite initially and either a composite or hdmi monitor connected.
 
-Here's the key map http://wiki.slimdevices.com/index.ph...Developers_FAQ
+Here's the key map http://wiki.slimdevices.com/index.php/SqueezePlay_Developers_FAQ
 
-The Joggler and WQVGA Small Print Skins also work with a mouse or touchpad and should work with touch screens as well, if the screen uses the framebuffer devices like /dev/fb?.
+Only the Joggler and WQVGA Small Print Skins work with a mouse or touchpad and should work with touch screens, if the screen uses a framebuffer device like /dev/fb?.
 
 Note that NONE of the HD Skins support a pointer or touch device.
 
@@ -36,7 +36,7 @@ All the skins can be used with a flirc IR dongle and a squeezebox remote.
 
 https://flirc.tv/product/flirc/
 
-You'll need to load one of the flirc config from another computer.  Start with the fcfg in **ralphy_jivelite_flirc_map.zip** first and if you get multiple key presses for one press then try the other config in **ralphy_jivelite_flirc_map_debounce.zip**
+You'll need to load one of the flirc config files from another computer.  Start with the fcfg file in **ralphy_jivelite_flirc_map.zip** and if you get multiple key presses for one press then try the other config in **ralphy_jivelite_flirc_map_debounce.zip**
 
 Both files are available in the repository.
 
