@@ -5,10 +5,6 @@ piCoPlayer /dev/fb jivelite.tcz
 
 Copy these two files to /mnt/mmcblk0p2/tce/optional on the piCorePlayer sd card.
 
-There's enough free space on the default image to add the jivelite files.  If you've installed other packages you might need to increase the size of the ext4 partition mmcblk0p2.
-
-If you're not comfortable performing either step listed above, stop now.  The jivelite package is currently being evaluated for inclusion in the default piCoPlayer image.
-
 https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz
 
 https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz.md5.txt
@@ -17,6 +13,11 @@ https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz.md5.txt
 Add the following line to the end of /mnt/mmcblk0p2/tce/onboot.lst
 
 jivelite.tcz
+
+
+There's enough free space on the default image to add the jivelite files.  If you've installed other packages you might need to increase the size of the ext4 partition mmcblk0p2.
+
+If you're not comfortable performing either step listed above, stop now.  The jivelite package is currently being evaluated for inclusion in the default piCoPlayer image.
 
 
 To start jivelite on boot add this line in one of the user command fields at the bottom of the tweaks webgui.
