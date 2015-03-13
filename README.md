@@ -5,7 +5,9 @@ piCoPlayer /dev/fb jivelite.tcz
 
 Copy these two files to /mnt/mmcblk0p2/tce/optional on the piCorePlayer sd card.
 
-You might need to increase the size of the ext4 partition mmcblk0p2 depending on your free space.
+There's enough free space on the default image to add the jivelite files.  If you've installed other packages you might need to increase the size of the ext4 partition mmcblk0p2.
+
+If you're not comfortable performing either step listed above, stop now.  The jivelite package is currently being evaluated for inclusion in the default piCoPlayer image.
 
 https://github.com/ralph-irving/tcz-jivelite/raw/master/jivelite.tcz
 
@@ -80,7 +82,7 @@ Install squeezeplay
 
 mkdir -p /opt/squeezeplay
 
-tar -C /opt/squeezeplay ../build/squeezeplay-7.8.0-.tgz
+tar -C /opt/squeezeplay -xzf ../build/squeezeplay-7.8.0-.tgz
 
 
 Compile jivelite
