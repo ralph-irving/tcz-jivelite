@@ -1,5 +1,5 @@
 # tcz-jivelite
-piCoPlayer /dev/fb jivelite.tcz
+piCorePlayer /dev/fb jivelite.tcz
 
 **Installation Instructions on piCorePlayer 1.19+**
 
@@ -17,9 +17,13 @@ To start jivelite on boot add this line in one of the user command fields at the
 
 /opt/jivelite/bin/jivelite-sp
 
+To enable the visualizer now playing screens in 1.19, add a lowercase -v to the Various Input text field at the bottom of the Squeezelite Settings webgui page as the Visualiser support option is broken in 1.19.
+
 Reboot piCorePlayer
 
-The jivelite package is currently being evaluated for inclusion in the default piCoPlayer image.
+To enable visualizers support after having run the jivelite config once already, add -v as above, kill the jivelite process, then delete the .jivelite folder in /home/tc and reboot.  After the reboot you will need to reconfigure jivelte.
+
+The jivelite package is currently being evaluated for inclusion in the default piCorePlayer image.
 
 I've tested it on a B and B+.
 
