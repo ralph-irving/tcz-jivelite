@@ -19,6 +19,10 @@ To start jivelite on boot add this line in one of the user command fields at the
 
 To enable the visualizer now playing screens in 1.19, add a lowercase -v to the Various Input text field at the bottom of the Squeezelite Settings webgui page as the Visualiser support option is broken in 1.19.
 
+To stop the configuration backup from including all the images from the jivelite installation add this line to /opt/.xfiletool.lst
+
+opt/jivelite
+
 Reboot piCorePlayer
 
 To enable visualizers support after having run the jivelite config once already, add -v as above, kill the jivelite process, then delete the .jivelite folder in /home/tc and reboot.  After the reboot you will need to reconfigure jivelte.
