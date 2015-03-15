@@ -35,7 +35,7 @@ You need a keyboard to configure jivelite initially and either a composite or hd
 
 Here's the key map http://wiki.slimdevices.com/index.php/SqueezePlay_Developers_FAQ
 
-Only the Joggler and WQVGA Small Print Skins work with a mouse or touchpad and should work with touch screens, if the screen uses a framebuffer device like /dev/fb?.
+Only the Joggler (800x480) and WQVGA Small Print (480x272) Skins work with a mouse or touchpad and should work with touch screens, if the screen uses a framebuffer device like /dev/fb?.  The skins don't automatically resize.  If the screen is not one of these two resolutions, it would need to be modified to match the new size.  I will NOT make these changes for you.
 
 Note that NONE of the HD Skins support a pointer or touch device.
 
