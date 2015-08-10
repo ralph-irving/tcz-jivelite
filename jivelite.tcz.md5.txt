@@ -1,1 +1,1 @@
-809c443b61cd9315ab9a63c79ada3936  /home/paddockd/jivelite.tcz
+809c443b61cd9315ab9a63c79ada3936  jivelite.tcz
