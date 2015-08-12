@@ -14,32 +14,19 @@ if [ -f $TCZ ]; then
 	rm $TCZ
 fi
 
-rm $HOME/opt/jivelite/bin/jivelite-sp
+cd /usr/lib/arm-linux-gnueabihf/
+tar -cf - libts-0.0.so* | (cd $HOME/opt/jivelite/lib; tar -xvf -)
 
-cp -p $HOME/source/tcz/jivelite/jivelite-sp $HOME/opt/jivelite/bin
+rm $HOME/opt/jivelite/bin/jivelite-sp
+cp -p tcz-jivelite/jivelite-sp $HOME/opt/jivelite/bin
 
 cd $HOME
-
 mkdir tcz
 mv opt tcz
 
-mkdir -p $HOME/tcz/usr/lib
-mkdir -p $HOME/tcz/usr/bin
-
-cd /usr/lib/arm-linux-gnueabihf/
-tar -cf - libts-0.0.so* | (cd $HOME/tcz/usr/lib; tar -xvf -)
-
-cd /usr/bin/
-tar -cf - ts_calibrate | (cd $HOME/tcz/usr/bin; tar -xvf -)
-
-cd $HOME
-
-mv $HOME/tcz/opt/jivelite/bin/lua $HOME/tcz/usr/bin
-mv $HOME/tcz/opt/jivelite/bin/luac $HOME/tcz/usr/bin
-
 mksquashfs tcz $TCZ -all-root
-md5sum $TCZ > ${TCZ}.md5.txt
+md5sum `basename $TCZ` > ${TCZ}.md5.txt
 
 cd $HOME
-#rm -rf tcz
+rm -rf tcz
 
