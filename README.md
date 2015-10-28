@@ -35,9 +35,25 @@ You need a keyboard to configure jivelite initially and either a composite or hd
 
 Here's the key map http://wiki.slimdevices.com/index.php/SqueezePlay_Developers_FAQ
 
+NONE of the HD Skins support a pointer or touch device.
+
 Only the Joggler (800x480) and WQVGA Small Print (480x272) Skins work with a mouse or touchpad and should work with touch screens, if the screen uses a framebuffer device like /dev/fb?.  The skins don't automatically resize.  If the screen is larger than the resolution of the chosen skin, SDL will automatically center it on the screen, leaving the outsides of the screen unused.  If the screen is smaller than the skin resolution, you will need to modify the skin to match the new size.  I will NOT make these changes if asked.
 
-Note that NONE of the HD Skins support a pointer or touch device.
+You may need to set environment variables before running jivelite on a framebuffer based touchscreen.  You may need a different path for SDL_MOUSEDEV, depending on how you've set up the touch screen device.
+
+For the RPI 7inch screen.
+
+export TSLIB_TSDEVICE=/dev/input/event0
+export SDL_MOUSEDRV=TSLIB
+export SDL_MOUSEDEV=$TSLIB_TSDEVICE
+
+Your screen may use another /dev/input/event? device if you have a keyboard or flirc connected to the rpi. If you recieve the 'not a touchscreen message/ from ts_calibrate, you're using the wrong device with TSLIB_TSDEVICE
+
+To manually recalibrate the touchscreen run /usr/local/bin/ts_calibrate as root.
+
+This will create the file /usr/local/etc/pointercal which is used by the ts library.
+
+As of October 28th, 2015 the jivelite.tcz package depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts
 
 All the skins can be used with a flirc IR dongle and a squeezebox remote.
 
