@@ -44,7 +44,9 @@ You may need to set environment variables before running jivelite on a framebuff
 For the RPI 7inch screen.
 
 export TSLIB_TSDEVICE=/dev/input/event0
+
 export SDL_MOUSEDRV=TSLIB
+
 export SDL_MOUSEDEV=$TSLIB_TSDEVICE
 
 Your screen may use another /dev/input/event? device if you have a keyboard or flirc connected to the rpi. If you recieve the 'not a touchscreen message/ from ts_calibrate, you're using the wrong device with TSLIB_TSDEVICE
