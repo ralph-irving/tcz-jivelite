@@ -53,7 +53,7 @@ To manually recalibrate the touchscreen run /usr/local/bin/ts_calibrate as root.
 
 This will create the file /usr/local/etc/pointercal which is used by the ts library.
 
-As of October 28th, 2015 the jivelite.tcz package depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts
+As of October 26th, 2015 the jivelite.tcz package depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts
 
 All the skins can be used with a flirc IR dongle and a squeezebox remote.
 
