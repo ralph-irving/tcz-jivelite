@@ -45,17 +45,22 @@ For the RPI 7inch screen.
 
 export TSLIB_TSDEVICE=/dev/input/event0
 
-export SDL_MOUSEDRV=TSLIB
-
-export SDL_MOUSEDEV=$TSLIB_TSDEVICE
-
 Your screen may use another /dev/input/event? device if you have a keyboard or flirc connected to the rpi. If you recieve the 'not a touchscreen message/ from ts_calibrate, you're using the wrong device with TSLIB_TSDEVICE
 
 To manually recalibrate the touchscreen run /usr/local/bin/ts_calibrate as root.
 
 This will create the file /usr/local/etc/pointercal which is used by the ts library.
 
-As of October 26th, 2015 the jivelite.tcz package depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts
+As of October 25th, 2015 the jivelite.tcz package is the last release before the touch functionality was introduced. It is installed by piCorePlayer versions older than 1.21g.  This package will receive no further updates.
+
+The jivelite_touch.tcz is installed by piCorePlayer release 1.21g and newer and depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts  Displaying the mouse pointer can be disabled with the touch release be defining either of the environment variables prior to starting jivelite.
+
+export SDL_TOUCHSCREEN=1
+
+or
+
+export JIVE_NOCURSOR=true
+
 
 All the skins can be used with a flirc IR dongle and a squeezebox remote.
 
