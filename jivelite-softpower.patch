@@ -1,0 +1,13 @@
+Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+===================================================================
+--- share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
++++ share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+@@ -559,7 +559,7 @@
+ 
+ 	if not self:isSoftPowerOn() then
+ 		--allow input to pass through, so that the following listeners will be honored
+-	        self:_setSSAllowedActions(true, {}, true)
++	        --self:_setSSAllowedActions(true, {}, true)
+ 
+ 		window:ignoreAllInputExcept(    { "power", "power_on", "power_off" },
+ 		                                function(actionEvent)
