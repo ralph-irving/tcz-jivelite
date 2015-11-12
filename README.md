@@ -53,7 +53,7 @@ This will create the file /usr/local/etc/pointercal which is used by the ts libr
 
 As of October 25th, 2015 the jivelite.tcz package is the last release before the touch functionality was introduced. It is installed by piCorePlayer versions older than 1.21g.  This package will receive no further updates.
 
-The jivelite_touch.tcz is installed by piCorePlayer release 1.21g and newer and depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts  Displaying the mouse pointer can be disabled with the touch release be defining either of the environment variables prior to starting jivelite.
+The jivelite_touch.tcz is installed by piCorePlayer release 1.21g and newer and depends on the libts.tcz package from https://github.com/ralph-irving/tcz-libts  Displaying the mouse pointer can be disabled with the touch release by defining either of the environment variables prior to starting jivelite.
 
 export SDL_TOUCHSCREEN=1
 

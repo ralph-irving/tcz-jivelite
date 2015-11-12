@@ -47,6 +47,7 @@ find jivelite -type d -name '.svn' -exec rm -rf {} \;
 cd $OUTPUT/opt/jivelite/lib || exit 1
 tar -xzf $OUTPUT/../jivelite-pico-libs.tar.gz
 cd $OUTPUT/opt/jivelite || exit 1
+patch -p0 -i$OUTPUT/../jivelite-softpower.patch
 find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 #find lib -type f -name '*so*' -exec strip --strip-unneeded {} \;
 patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL-1.2.so.0.11.4
@@ -54,6 +55,7 @@ patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL_gfx.so.13.9.1
 find bin -type f -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 find bin -type f -exec strip --strip-unneeded {} \;
 patch -p0 -i$OUTPUT/../$SRC/scripts/remove-ffi.patch
+cp -pr $OUTPUT/../DisplayOff $OUTPUT/opt/jivelite/share/jive/applets/
 cp -p $OUTPUT/../jivelite-sp $OUTPUT/opt/jivelite/bin
 
 echo "Building tcz"
@@ -93,6 +95,9 @@ fi
 ln -s jivelite jivelite-sp
 
 cd $OUTPUT/opt/jivelite
+patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch
+rm -rf $OUTPUT/opt/jivelite/share/jive/applets/DisplayOff
+
 if [ -f $OUTPUT/../$JIVELITE-$JIVELITEVERSION-$SVNVERSION.tar.gz ]; then
 	rm $OUTPUT/../$JIVELITE-$JIVELITEVERSION-$SVNVERSION.tar.gz
 fi
