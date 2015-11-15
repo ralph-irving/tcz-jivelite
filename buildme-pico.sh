@@ -56,7 +56,9 @@ find bin -type f -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 find bin -type f -exec strip --strip-unneeded {} \;
 patch -p0 -i$OUTPUT/../$SRC/scripts/remove-ffi.patch
 cp -pr $OUTPUT/../DisplayOff $OUTPUT/opt/jivelite/share/jive/applets/
-cp -p $OUTPUT/../jivelite-sp $OUTPUT/opt/jivelite/bin
+cp -p $OUTPUT/../jivelite-sp $OUTPUT/opt/jivelite/bin/jivelite.sh
+cd $OUTPUT/opt/jivelite/bin
+ln -s jivelite jivelite-sp
 
 echo "Building tcz"
 cd $OUTPUT/.. >> $LOG
@@ -89,10 +91,10 @@ echo "module linear" >> $OUTPUT/$TSLIB_CONFFILE
 echo "63975 7 724784 2 62927 574656 65536 800 480" > $OUTPUT/opt/jivelite/lib/pointercal
 
 cd $OUTPUT/opt/jivelite/bin
-if [ -f jivelite-sp ]; then
-	rm jivelite-sp
+if [ -f jivelite.sh ]; then
+	rm jivelite.sh
 fi
-ln -s jivelite jivelite-sp
+# ln -s jivelite jivelite-sp
 
 cd $OUTPUT/opt/jivelite
 patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch

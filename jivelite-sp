@@ -1,9 +1,11 @@
 #!/bin/sh
-export HOME=/home/tc
 if [ ! -z ${SDL_TOUCHSCREEN} ]; then
-export JIVE_NOCURSOR=true
+    export JIVE_NOCURSOR=1
 fi
+
+export HOME=/home/tc
+
 while true; do
-sleep 3
-/opt/jivelite/bin/jivelite > /dev/null 2>&1
+    sleep 3
+    /opt/jivelite/bin/jivelite-sp >> /dev/null 2>&1
 done
