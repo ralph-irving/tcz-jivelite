@@ -47,6 +47,14 @@ find jivelite -type d -name '.svn' -exec rm -rf {} \;
 cd $OUTPUT/opt/jivelite/lib || exit 1
 tar -xzf $OUTPUT/../jivelite-pico-libs.tar.gz
 cd $OUTPUT/opt/jivelite || exit 1
+rm share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_d.png
+rm share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_e.png
+rm share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.png
+rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_b.png
+rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_w.png
+rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_d.png
+rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_e.png
+rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.png
 patch -p0 -i$OUTPUT/../jivelite-softpower.patch
 find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 #find lib -type f -name '*so*' -exec strip --strip-unneeded {} \;
@@ -70,9 +78,6 @@ fi
 mksquashfs $OUTPUT $TCZ -all-root >> $LOG
 md5sum `basename $TCZ` > ${TCZ}.md5.txt
 
-#echo "$TCZ contains"
-#unsquashfs -ll $TCZ
-
 # Make tarball for debian wheezy rpi install
 cd $OUTPUT/opt/jivelite/lib
 tar -xzf $OUTPUT/../libts-pico.tar.gz
@@ -94,11 +99,12 @@ cd $OUTPUT/opt/jivelite/bin
 if [ -f jivelite.sh ]; then
 	rm jivelite.sh
 fi
-# ln -s jivelite jivelite-sp
 
 cd $OUTPUT/opt/jivelite
 patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch
 rm -rf $OUTPUT/opt/jivelite/share/jive/applets/DisplayOff
+cp -p $OUTPUT/../$SRC/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/
+cp -p $OUTPUT/../$SRC/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/
 
 if [ -f $OUTPUT/../$JIVELITE-$JIVELITEVERSION-$SVNVERSION.tar.gz ]; then
 	rm $OUTPUT/../$JIVELITE-$JIVELITEVERSION-$SVNVERSION.tar.gz

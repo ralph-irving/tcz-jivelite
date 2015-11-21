@@ -7,5 +7,5 @@ export HOME=/home/tc
 
 while true; do
     sleep 3
-    /opt/jivelite/bin/jivelite-sp >> /dev/null 2>&1
+    /opt/jivelite/bin/jivelite-sp > /dev/null 2>&1
 done
