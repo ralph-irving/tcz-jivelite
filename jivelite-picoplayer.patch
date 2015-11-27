@@ -1,6 +1,19 @@
+Index: Makefile
+===================================================================
+--- Makefile	(revision 662)
++++ Makefile	(working copy)
+@@ -1,7 +1,7 @@
+ # Jivelite makefile
+ 
+ # set PREFIX for location of luajit include and libs
+-PREFIX ?= /usr/local
++PREFIX ?= /opt/squeezeplay
+ 
+ all: srcs libs
+ 
 Index: src/Makefile
 ===================================================================
---- src/Makefile	(revision 649)
+--- src/Makefile	(revision 662)
 +++ src/Makefile	(working copy)
 @@ -1,8 +1,8 @@
  LDFLAGS ?= -lrt
@@ -22,22 +35,9 @@ Index: src/Makefile
  
  $(OBJECTS): $(DEPS)
  
-Index: Makefile
-===================================================================
---- Makefile	(revision 649)
-+++ Makefile	(working copy)
-@@ -1,7 +1,7 @@
- # Jivelite makefile
- 
- # set PREFIX for location of luajit include and libs
--PREFIX ?= /usr/local
-+PREFIX ?= /opt/squeezeplay
- 
- all: srcs libs
- 
 Index: lib-src/luazipfilter/Makefile
 ===================================================================
---- lib-src/luazipfilter/Makefile	(revision 649)
+--- lib-src/luazipfilter/Makefile	(revision 662)
 +++ lib-src/luazipfilter/Makefile	(working copy)
 @@ -1,5 +1,5 @@
 -CFLAGS  = -O2 -I$(PREFIX)/include/luajit-2.0 -fPIC
@@ -49,20 +49,21 @@ Index: lib-src/luazipfilter/Makefile
  LIB = zipfilter.so
 Index: lib-src/Makefile
 ===================================================================
---- lib-src/Makefile	(revision 649)
+--- lib-src/Makefile	(revision 662)
 +++ lib-src/Makefile	(working copy)
-@@ -2,7 +2,7 @@
+@@ -2,7 +2,8 @@
  # NB - repo has modified paths which assume use of luajit2.0 from source
  
  TARGET   ?= linux
 -LD_FLAGS ?= "-shared"
-+LD_FLAGS ?= "-shared -L/opt/jivelite/lib -L/opt/squeezeplay/lib"
++LD_FLAGS ?= "-shared -L/opt/squeezeplay/lib -Wl,-rpath,/opt/jivelite/lib"
++CFLAGS ?= "-s"
  
  LIBS = cjson luaexpat luafilesystem luamd5 luasocket luazipfilter
  
 Index: lib-src/luaexpat-1.2.0/config
 ===================================================================
---- lib-src/luaexpat-1.2.0/config	(revision 649)
+--- lib-src/luaexpat-1.2.0/config	(revision 662)
 +++ lib-src/luaexpat-1.2.0/config	(working copy)
 @@ -4,7 +4,7 @@
  # System's lua directory (where Lua libraries are installed)
@@ -75,7 +76,7 @@ Index: lib-src/luaexpat-1.2.0/config
  #LIB_OPTION= -shared #for Linux
 Index: lib-src/luasocket-2.0.2/config
 ===================================================================
---- lib-src/luasocket-2.0.2/config	(revision 649)
+--- lib-src/luasocket-2.0.2/config	(revision 662)
 +++ lib-src/luasocket-2.0.2/config	(working copy)
 @@ -18,7 +18,7 @@
  #LUAINC=-I/usr/local/include/lua50
@@ -88,7 +89,7 @@ Index: lib-src/luasocket-2.0.2/config
  # Compat-5.1 directory
 Index: lib-src/luamd5/Makefile
 ===================================================================
---- lib-src/luamd5/Makefile	(revision 649)
+--- lib-src/luamd5/Makefile	(revision 662)
 +++ lib-src/luamd5/Makefile	(working copy)
 @@ -2,7 +2,7 @@
  
@@ -101,7 +102,7 @@ Index: lib-src/luamd5/Makefile
  
 Index: lib-src/lua-cjson-2.1.0/Makefile
 ===================================================================
---- lib-src/lua-cjson-2.1.0/Makefile	(revision 649)
+--- lib-src/lua-cjson-2.1.0/Makefile	(revision 662)
 +++ lib-src/lua-cjson-2.1.0/Makefile	(working copy)
 @@ -13,12 +13,12 @@
  ##### Build defaults #####
@@ -121,7 +122,7 @@ Index: lib-src/lua-cjson-2.1.0/Makefile
  LUA_BIN_DIR =       $(PREFIX)/bin
 Index: lib-src/luafilesystem-1.6.2/config
 ===================================================================
---- lib-src/luafilesystem-1.6.2/config	(revision 649)
+--- lib-src/luafilesystem-1.6.2/config	(revision 662)
 +++ lib-src/luafilesystem-1.6.2/config	(working copy)
 @@ -1,13 +1,13 @@
  # Installation directories

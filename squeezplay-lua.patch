@@ -1,21 +1,8 @@
-Index: src/luaconf.h
-===================================================================
---- src/luaconf.h	(revision 582)
-+++ src/luaconf.h	(working copy)
-@@ -49,7 +49,7 @@
- #if defined(LUA_USE_LINUX)
- #define LUA_USE_POSIX
- #define LUA_USE_DLOPEN		/* needs an extra library: -ldl */
--#define LUA_USE_READLINE	/* needs some extra libraries */
-+/* #define LUA_USE_READLINE	needs some extra libraries */
- #endif
- 
- #if defined(LUA_USE_MACOSX)
 Index: src/Makefile
 ===================================================================
 --- src/Makefile	(revision 582)
 +++ src/Makefile	(working copy)
-@@ -10,14 +10,14 @@
+@@ -10,15 +10,15 @@
  # commented out things exported by main mainfile
  
  CC ?= gcc
@@ -28,10 +15,12 @@ Index: src/Makefile
  LIBS= -lm $(MYLIBS)
  
 -MYCFLAGS=-Wl,rpath,/opt/squeezeplay/lib
+-MYLDFLAGS=
 +MYCFLAGS=
- MYLDFLAGS=
++MYLDFLAGS=-Wl,-rpath,/opt/jivelite/lib
  MYLIBS=
  
+ # == END OF USER SETTINGS. NO NEED TO CHANGE ANYTHING BELOW THIS LINE =========
 @@ -42,7 +42,7 @@
  LUATHREAD_O=
  
@@ -64,3 +53,16 @@ Index: src/Makefile
  
  squeezeos:
  	$(MAKE) all MYCFLAGS="-Os -Wall -fpic -DLUA_USE_POSIX -DLUA_USE_DLOPEN" MYLIBS="-ldl" OSXPREFIX="pwd"
+Index: src/luaconf.h
+===================================================================
+--- src/luaconf.h	(revision 582)
++++ src/luaconf.h	(working copy)
+@@ -49,7 +49,7 @@
+ #if defined(LUA_USE_LINUX)
+ #define LUA_USE_POSIX
+ #define LUA_USE_DLOPEN		/* needs an extra library: -ldl */
+-#define LUA_USE_READLINE	/* needs some extra libraries */
++/* #define LUA_USE_READLINE	needs some extra libraries */
+ #endif
+ 
+ #if defined(LUA_USE_MACOSX)
