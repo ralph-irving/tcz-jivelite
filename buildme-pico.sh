@@ -36,16 +36,28 @@ cp -p bin/jivelite $OUTPUT/opt/jivelite/bin
 mkdir -p $OUTPUT/opt/jivelite/lib
 cp -pr lib $OUTPUT/opt/jivelite
 cp -pr share $OUTPUT/opt/jivelite
+
+# Install shared libraries from squeezeplay build, not right now, use tar file below
 #cd /opt/squeezeplay/lib
 #tar -cf - libexpat.so* libfreetype.so* libjpeg.so* libpng.so* libpng12.so* libSDL_gfx.so* libSDL_image-1.2.so.* libSDL_ttf-2.0.so* libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
+
+# Install lua
 cp -p $OUTPUT/../$SRC/lua-5.1.1/src/{lua,luac} $OUTPUT/opt/jivelite/bin
 cp -p $OUTPUT/../$SRC/lua-5.1.1/src/liblua.so $OUTPUT/opt/jivelite/lib
+
+# Remove subversion files.
 cd $OUTPUT/opt || exit 1
 find jivelite -type d -name '.svn' -exec rm -rf {} \;
-#cd $HOME/source/squeezeplay/build/linux/lib || exit 1
-#tar -cf - libSDL-1.2.so* libSDL_gfx.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
+
+# Use our precompiled libraries from squeezeplay
 cd $OUTPUT/opt/jivelite/lib || exit 1
 tar -xzf $OUTPUT/../jivelite-pico-libs.tar.gz
+
+# Install the latest SDL library changes to troubleshoot fbdev issues.
+cd $HOME/source/squeezeplay/build/linux/lib || exit 1
+tar -cf - libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
+
+# Remove user contributed VU Meters, they are installed as tcz packages
 cd $OUTPUT/opt/jivelite || exit 1
 rm share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_d.png
 rm share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_e.png
@@ -55,16 +67,32 @@ rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_w.pn
 rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_d.png
 rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_e.png
 rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.png
+
+# Allow jivelite to receive power off notifications
 patch -p0 -i$OUTPUT/../jivelite-softpower.patch
+
+# Only look for our shared libraries in /opt/jivelite/lib
 find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
-#find lib -type f -name '*so*' -exec strip --strip-unneeded {} \;
+
+# Include /usr/local/lib in library search patch so SDL/SDLgfx can load libts
 patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL-1.2.so.0.11.4
 patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL_gfx.so.13.9.1
 find bin -type f -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
+
+# Keep the install as small as possible
 find bin -type f -exec strip --strip-unneeded {} \;
+#find lib -type f -name '*so*' -exec strip --strip-unneeded {} \;
+
+# ffi not supported for standard lua
 patch -p0 -i$OUTPUT/../$SRC/scripts/remove-ffi.patch
+
+# Install applet to enable turning the rpi backlight off
 cp -pr $OUTPUT/../DisplayOff $OUTPUT/opt/jivelite/share/jive/applets/
+
+# Install script to restart jivelite after a Quit
 cp -p $OUTPUT/../jivelite-sp $OUTPUT/opt/jivelite/bin/jivelite.sh
+
+# Allow removal of Quit from home menu
 cd $OUTPUT/opt/jivelite/bin
 ln -s jivelite jivelite-sp
 
@@ -75,7 +103,7 @@ if [ -f $TCZ ]; then
 	rm $TCZ >> $LOG
 fi
 
-mksquashfs $OUTPUT $TCZ -all-root >> $LOG
+mksquashfs $OUTPUT $TCZ -all-root -no-progress >> $LOG
 md5sum `basename $TCZ` > ${TCZ}.md5.txt
 
 # Make tarball for debian wheezy rpi install
