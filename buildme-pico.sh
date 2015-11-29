@@ -37,9 +37,9 @@ mkdir -p $OUTPUT/opt/jivelite/lib
 cp -pr lib $OUTPUT/opt/jivelite
 cp -pr share $OUTPUT/opt/jivelite
 
-# Install shared libraries from squeezeplay build, not right now, use tar file below
-#cd /opt/squeezeplay/lib
-#tar -cf - libexpat.so* libfreetype.so* libjpeg.so* libpng.so* libpng12.so* libSDL_gfx.so* libSDL_image-1.2.so.* libSDL_ttf-2.0.so* libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
+# Install shared libraries from squeezeplay build
+cd /opt/squeezeplay/lib
+tar -cf - libexpat.so* libfreetype.so* libjpeg.so* libpng.so* libpng12.so* libSDL_gfx.so* libSDL_image-1.2.so.* libSDL_ttf-2.0.so* libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
 
 # Install lua
 cp -p $OUTPUT/../$SRC/lua-5.1.1/src/{lua,luac} $OUTPUT/opt/jivelite/bin
@@ -49,13 +49,13 @@ cp -p $OUTPUT/../$SRC/lua-5.1.1/src/liblua.so $OUTPUT/opt/jivelite/lib
 cd $OUTPUT/opt || exit 1
 find jivelite -type d -name '.svn' -exec rm -rf {} \;
 
-# Use our precompiled libraries from squeezeplay
-cd $OUTPUT/opt/jivelite/lib || exit 1
-tar -xzf $OUTPUT/../jivelite-pico-libs.tar.gz
+# Use our precompiled libraries from squeezeplay, not now, use full build above.
+#cd $OUTPUT/opt/jivelite/lib || exit 1
+#tar -xzf $OUTPUT/../jivelite-pico-libs.tar.gz
 
-# Install the latest SDL library changes to troubleshoot fbdev issues.
-cd $HOME/source/squeezeplay/build/linux/lib || exit 1
-tar -cf - libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
+# Install the latest SDL library changes to troubleshoot fbdev issues. No longer used.
+#cd $HOME/source/squeezeplay/build/linux/lib || exit 1
+#tar -cf - libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
 
 # Remove user contributed VU Meters, they are installed as tcz packages
 cd $OUTPUT/opt/jivelite || exit 1
