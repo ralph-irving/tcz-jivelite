@@ -1,7 +1,7 @@
 ################################################################################
 # Squeezeplay makefile for Linux armel and raspberry pi armhf
 # Copyright 2007 Logitech
-# Copyright 2015 Ralph Irving
+# Copyright 2012 Duane Paddock
 ################################################################################
 
 # Additional packages required to build
@@ -56,7 +56,7 @@ all: sdl-all lua-all app
 #####
 
 .PHONY: sdl-all freetype sdl sdl-image sdl-tff sdl-gfx c-ares
-sdl-all: zlib expat freetype sdl libpng libjpeg sdl-image sdl-ttf sdl-gfx
+sdl-all: zlib expat freetype tslib sdl libpng libjpeg sdl-image sdl-ttf sdl-gfx
 
 generated:
 	mkdir -p generated
@@ -98,9 +98,16 @@ jpeg-6b/Makefile:
 libjpeg: jpeg-6b/Makefile
 	cd jpeg-6b; make && make install
 
+# tslib
+libts-1.0/Makefile:
+	cd libts-1.0; ./configure --prefix=${PREFIX} --enable-shared=yes --enable-static=no
+
+tslib: libts-1.0/Makefile
+	cd libts-1.0; make && make install
+
 # sdl
 SDL-1.2.15/Makefile:
-	cd SDL-1.2.15; ./configure  ${ENABLE_PROFILING} --host=${HOST} --target=${TARGET} --prefix=${PREFIX} --enable-audio=no --enable-video --enable-events --enable-joystick=no --enable-cdrom=no --enable-threads --enable-timers --enable-file --enable-loadso --enable-esd=no --enable-arts=no --enable-esd-shared=no --enable-clock_gettime --enable-video-x11=no --enable-video-opengl=no --enable-video-dummy=no --enable-video-directfb=no
+	cd SDL-1.2.15; ./configure  ${ENABLE_PROFILING} --host=${HOST} --target=${TARGET} --prefix=${PREFIX} --enable-audio=no --enable-video --enable-events --enable-joystick=no --enable-cdrom=no --enable-threads --enable-timers --enable-file --enable-loadso --enable-esd=no --enable-arts=no --enable-esd-shared=no --enable-clock_gettime --enable-video-x11=no --enable-video-opengl=no --enable-video-dummy=no --enable-video-directfb=no --enable-input-tslib=yes
 
 sdl: SDL-1.2.15/Makefile
 	cd SDL-1.2.15; make && make install
@@ -327,6 +334,7 @@ clean:
 	-cd freetype-2.1.10; make distclean
 	-cd libpng-1.2.32; make distclean
 	-cd jpeg-6b; make distclean
+	-cd libts-1.0; make distclean
 	-cd SDL-1.2.15; make distclean; rm -f include/SDL_config.h sdl.pc;
 	-cd SDL_image-1.2.5; make distclean
 	-cd SDL_ttf-2.0.8; make distclean
