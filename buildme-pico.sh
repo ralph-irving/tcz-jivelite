@@ -71,6 +71,9 @@ rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.pn
 # Allow jivelite to receive power off notifications
 patch -p0 -i$OUTPUT/../jivelite-softpower.patch
 
+# Set JogglerSkin as the default.
+patch -p0 -i$OUTPUT/../jivelite-defaultjogglerskin.patch
+
 # Only look for our shared libraries in /opt/jivelite/lib
 find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 
