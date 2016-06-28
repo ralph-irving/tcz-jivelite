@@ -85,13 +85,11 @@ function _screen(self, state)
 	if state == "on" then
 		Framework:setUpdateScreen(true)
 		_write("/sys/class/backlight/rpi_backlight/bl_power", "1")
-		-- _write("/sys/devices/platform/fab4_gpio.0/LCD_DISP", "1")
 		-- turn on backlight on timer to avoid white flash
 		onTimer:restart()
 	else
 		Framework:setUpdateScreen(false)
 		_write("/sys/class/backlight/rpi_backlight/bl_power", "1")
-		-- _write("/sys/devices/platform/fab4_gpio.0/LCD_DISP", "0")
 		onTimer:stop()
 	end
 end
