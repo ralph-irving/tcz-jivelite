@@ -68,6 +68,10 @@ rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_d.pn
 rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_e.png
 rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.png
 
+# Replace jivelite splash screen
+cp -p share/jive/jive/splash.png $OUTPUT/../splash.orig
+cp -p $OUTPUT/../pcp.png share/jive/jive/splash.png
+
 # Allow jivelite to receive power off notifications
 patch -p0 -i$OUTPUT/../jivelite-softpower.patch
 
@@ -133,6 +137,8 @@ fi
 
 cd $OUTPUT/opt/jivelite
 patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch
+cp -p $OUTPUT/../splash.orig share/jive/jive/splash.png
+rm -f $OUTPUT/../splash.orig
 rm -rf $OUTPUT/opt/jivelite/share/jive/applets/DisplayOff
 cp -p $OUTPUT/../$SRC/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/
 cp -p $OUTPUT/../$SRC/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/
