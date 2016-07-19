@@ -24,12 +24,9 @@ end
 
 
 function configureApplet(self)
-	-- remove original
-	appletManager:callService("removeScreenSaver", "BlankScreen", "openScreensaver")
-
 	-- add ourselves
 	appletManager:callService("addScreenSaver",
-		"Display Off",
+		self:string("SCREENSAVER_DISPLAYOFF"),
 		"DisplayOff", 
 		"openScreensaver", _, _, 100, 
 		"closeScreensaver"

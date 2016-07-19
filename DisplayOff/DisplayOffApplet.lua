@@ -4,28 +4,27 @@ Display Off Applet based on BlankScreen screensaver
 
 --]]
 
-local oo               = require("loop.simple")
+local tostring, tonumber = tostring, tonumber
+
 local io               = require("io")
+local oo               = require("loop.simple")
 local Framework        = require("jive.ui.Framework")
 local Window           = require("jive.ui.Window")
 local Surface          = require("jive.ui.Surface")
 local Icon             = require("jive.ui.Icon")
-local Timer            = require("jive.ui.Timer")
 local Applet           = require("jive.Applet")
+local Timer            = require("jive.ui.Timer")
 
-local jnt              = jnt
 local appletManager    = appletManager
 
 module(..., Framework.constants)
 oo.class(_M, Applet)
 
-
 function openScreensaver(self, menuItem)
-	log:info("open screensaver")
-	self.window = Window("text_list")
-
-	-- blank screen
 	self.sw, self.sh = Framework:getScreenSize()
+
+	-- create window and icon
+	self.window = Window("text_list")
 	self.bg  = Surface:newRGBA(self.sw, self.sh)
 	self.bg:filledRectangle(0, 0, self.sw, self.sh, 0x000000FF)
 
@@ -50,58 +49,41 @@ function openScreensaver(self, menuItem)
 
 	self.window:addListener(EVENT_MOTION,
 		function()
-			self:_screen("on")
 			self.window:hide()
 			return EVENT_CONSUME
 		end)
 
+	-- register window as a screensaver
 	local manager = appletManager:getAppletInstance("ScreenSavers")
-	manager:screensaverWindow(self.window, _, _, _, "DisplayOff")
+	manager:screensaverWindow(self.window, _, _, _, 'DisplayOff')
 
-	self.window:show(Window.transitionFadeIn)
+	self.window:show(Window.transitionNone)
 end
-
 
 function closeScreensaver(self)
-	log:info("close screensaver")
-	self:_screen("on")
+	--nothing to do!
 end
 
-
-function onOverlayWindowShown(self)
-	self:_screen("on")
-end
-
-
-function onOverlayWindowHidden(self)
-	self:_screen("off")
-end
-
-
-local onTimer = Timer(200, function() _write("/sys/class/backlight/rpi_backlight/bl_power", "0") end, true)
+-- disable updates on a timer so the screen is filled with a black rectange
+-- before the screen updates are turned off with setUpdateScreen(false)
+local timer = Timer(2000, function() Framework:setUpdateScreen(false) end, true)
 
 function _screen(self, state)
-	log:info("screen: ", state)
 	if state == "on" then
+		timer:stop()
 		Framework:setUpdateScreen(true)
-		_write("/sys/class/backlight/rpi_backlight/bl_power", "1")
-		-- turn on backlight on timer to avoid white flash
-		onTimer:restart()
+		_write("/sys/class/backlight/rpi_backlight/bl_power", "0")
 	else
-		Framework:setUpdateScreen(false)
 		_write("/sys/class/backlight/rpi_backlight/bl_power", "1")
-		onTimer:stop()
+		timer:start()
 	end
 end
-
 
 function _write(file, val)
 	local fh, err = io.open(file, "w")
 	if err then
-		log:warn("Can't write to ", file)
 		return
 	end
 	fh:write(val)
 	fh:close()
 end
-
