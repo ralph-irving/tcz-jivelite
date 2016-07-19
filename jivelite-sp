@@ -6,7 +6,7 @@ fi
 export HOME=/home/tc
 export JIVE_FRAMERATE=22
 
-/usr/sbin/fbset -depth 16
+/usr/sbin/fbset -depth 32
 
 while true; do
     sleep 3
