@@ -1,0 +1,44 @@
+Index: share/jive/jive/System.lua
+===================================================================
+--- share/jive/jive/System.lua	(revision 783)
++++ share/jive/jive/System.lua	(working copy)
+@@ -36,6 +36,9 @@
+ --]]
+ local tonumber, tostring, type, pairs = tonumber, tostring, type, pairs
+ 
++---------------------------------------------------------------------
++local io           = require("io")
++---------------------------------------------------------------------
+ local oo           = require("loop.simple")
+ local log           = require("jive.utils.log").logger("jivelite")
+ 
+@@ -96,10 +99,28 @@
+ 	return _capabilities["hasDigitalOut"] ~= nil
+ end
+ 
++---------------------------------------------------------------------
+ function hasTouch(self)
+-	return _capabilities["touch"] ~= nil
++	if _read("/sys/class/backlight/rpi_backlight/brightness") ~= nil then
++		return true
++	else
++		return _capabilities["touch"] ~= nil
++	end
+ end
++---------------------------------------------------------------------
+ 
++---------------------------------------------------------------------
++function _read(file)
++	local fh, err = io.open(file, "r")
++	if err then
++		return nil
++	end
++	local fc = fh:read("*all")
++	fh:close()
++	return fc
++end
++---------------------------------------------------------------------
++
+ function hasIr(self)
+ 	return _capabilities["ir"] ~= nil
+ end

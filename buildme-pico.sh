@@ -73,7 +73,11 @@ cp -p share/jive/jive/splash.png $OUTPUT/../splash.orig
 cp -p $OUTPUT/../pcp.png share/jive/jive/splash.png
 
 # Allow jivelite to receive power off notifications
-patch -p0 -i$OUTPUT/../jivelite-softpower.patch
+# patch -p0 -i$OUTPUT/../jivelite-softpower.patch
+patch -p0 -i$OUTPUT/../pcp-JiveMain-lua.patch
+patch -p0 -i$OUTPUT/../pcp-ScreenSaversApplet-lua.patch
+patch -p0 -i$OUTPUT/../pcp-SlimMenus-lua.patch
+patch -p0 -i$OUTPUT/../pcp-System-lua.patch
 
 # Set JogglerSkin as the default.
 patch -p0 -i$OUTPUT/../jivelite-defaultjogglerskin.patch
@@ -95,6 +99,9 @@ patch -p0 -i$OUTPUT/../$SRC/scripts/remove-ffi.patch
 
 # Install applet to enable turning the rpi backlight off
 cp -pr $OUTPUT/../DisplayOff $OUTPUT/opt/jivelite/share/jive/applets/
+
+# Install applet to enable turning the rpi backlight off
+cp -pr $OUTPUT/../piCorePlayer $OUTPUT/opt/jivelite/share/jive/applets/
 
 # Install script to restart jivelite after a Quit
 cp -p $OUTPUT/../jivelite-sp $OUTPUT/opt/jivelite/bin/jivelite.sh
@@ -136,10 +143,15 @@ if [ -f jivelite.sh ]; then
 fi
 
 cd $OUTPUT/opt/jivelite
-patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch
+#patch -p0 -R -i$OUTPUT/../jivelite-softpower.patch
+patch -p0 -R -i$OUTPUT/../pcp-JiveMain-lua.patch
+patch -p0 -R -i$OUTPUT/../pcp-ScreenSaversApplet-lua.patch
+patch -p0 -R -i$OUTPUT/../pcp-SlimMenus-lua.patch
+patch -p0 -R -i$OUTPUT/../pcp-System-lua.patch
 cp -p $OUTPUT/../splash.orig share/jive/jive/splash.png
 rm -f $OUTPUT/../splash.orig
 rm -rf $OUTPUT/opt/jivelite/share/jive/applets/DisplayOff
+rm -rf $OUTPUT/opt/jivelite/share/jive/applets/piCorePlayer
 cp -p $OUTPUT/../$SRC/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/WQVGAsmallSkin/images/UNOFFICIAL/VUMeter/
 cp -p $OUTPUT/../$SRC/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_?.png $OUTPUT/opt/jivelite/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/
 
