@@ -1,0 +1,132 @@
+MENU_REBOOT
+	EN	Reboot piCorePlayer
+	NL	piCorePlayer opnieuw opstarten
+MENU_SHUTDOWN
+	EN	Shutdown piCorePlayer
+	NL	piCorePlayer afsluiten
+MENU_ADJUST_BRIGHTNESS
+	EN	Adjust Display Backlight Brightness
+	NL	Helderheid scherm aanpassen
+MENU_ADJUST_BRIGHTNESS_WHEN_OFF
+	EN	Adjust Display Backlight Brightness when Powered Off
+	NL	Helderheid scherm aanpassen wanneer de speler uit staat
+MENU_SAVE_SETTINGS
+	EN	Save Settings to SD Card
+	NL	Instellingen opslaan op SD kaart
+MENU_RESCAN_LMS_MEDIA_LIBRARY
+	EN	Rescan LMS Media Library
+	NL	LMS media collectie opnieuw scannen
+MENU_WAKE_ON_LAN
+	EN	Wake-on-LAN
+	NL	Wake-on-LAN
+MENU_ENABLE_POWER_ON_BUTTON_WHEN_OFF
+	EN	Enable Power On Button when Powered Off
+	NL	Toon aan/uit-knop wanneer de speler uit staat
+WOL_MENU_TITLE
+	EN	Wake-on-LAN
+	NL	Wake-on-LAN
+WOL_MENU_SEND_WOL_PACKET
+	EN	Send Magic Packet
+	NL	Verstuur Magic Packet
+WOL_MENU_LMS_MAC_ADDRESS
+	EN	LMS MAC Address
+	NL	LMS MAC adres
+WOL_MENU_NETWORK_INTERFACE
+	EN	Network Interface
+	NL	Netwerk interface
+WOL_MENU_ENABLE_WOL_IN_PCP_CONFIG
+	EN	Enable WOL in piCorePlayer Config File
+	NL	WOL aanzetten in piCorePlayer configuratie bestand
+WOL_MENU_UPDATE_PCP_CONFIG
+	EN	Update WOL Settings in piCorePlayer Config File
+	NL	Werk WOL instellingen bij in piCorePlayer configuratie bestand
+LABEL_ADJUST_BRIGHTNESS_WHEN_OFF
+	EN	Backlight Brightness when Powered Off:
+	NL	Helderheid wanneer de speler uit staat:
+HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF
+	EN	\nAdjust backlight brightness when player is powered off (no visual feedback!). \n\nPress (volume) up\down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
+	NL	\nAanpassen van de helderheid wanneer de speler uit staat (geen visuele terugkoppeling!). \n\nDruk op (volume) hoger\lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
+LABEL_ADJUST_BRIGHTNESS
+	EN	Backlight Brightness:
+	NL	Helderheid:
+HELP_TEXT_ADJUST_BRIGHTNESS
+	EN	\nAdjusting backlight brightness works only on PCB v1.1 displays. Older revisions toggle between backlight off (0-127) and backlight on (128-255).\n\nPress (volume) up\down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
+	NL	\nAanpassen van de helderheid werkt alleen in combinatie met PCB v1.1 schermen. Oudere sherm revisies schakelen tussen achtergrondverlichting uit (0-127) en aan (128-255).\n\nDruk op (volume) hoger\lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
+LABEL_NO_DISPLAY_FOUND_ADJUST_BRIGHTNESS
+	EN	No official Raspberry Pi display found!
+	NL	Geen officieel Raspberry Pi scherm gedetecteerd!
+LABEL_REBOOT_IN_PROGRESS
+	EN	Reboot in
+	NL	Opnieuw opstarten in
+LABEL_REBOOTING
+	EN	Rebooting!
+	NL	Opnieuw opstarten!
+LABEL_SHUTDOWN_IN_PROGRESS
+	EN	Shutdown in
+	NL	Afsluiten in
+LABEL_SHUTTING_DOWN
+	EN	Shutting down!
+	NL	Afsluiten!
+LABEL_COUNTDOWN_5_SECONDS
+	EN	5 seconds
+	NL	5 seconden
+LABEL_COUNTDOWN_4_SECONDS
+	EN	4 seconds
+	NL	4 seconden
+LABEL_COUNTDOWN_3_SECONDS
+	EN	3 seconds
+	NL	3 seconden
+LABEL_COUNTDOWN_2_SECONDS
+	EN	2 seconds
+	NL	2 seconden
+LABEL_COUNTDOWN_1_SECOND
+	EN	1 second
+	NL	1 seconde
+LABEL_SAVING_SETTINGS
+	EN	Saving settings to SD card
+	NL	Instellingen worden opgeslagen op SD kaart
+LABEL_SETTINGS_SAVED
+	EN	Settings saved to SD card!
+	NL	Instellingen opgeslagen op SD kaart!
+LABEL_RESCAN_LMS_MEDIA_LIBRARY
+	EN	Rescan LMS Media Library in
+	NL	LMS media collectie opnieuw scannen in
+LABEL_RESCAN_LMS_MEDIA_LIBRARY_INITIATED
+	EN	LMS Media Library rescan initiated...
+	NL	LMS media collectie wordt opnieuw gescanned...
+LABEL_RESCAN_LMS_MEDIA_LIBRARY_IN_PROGRESS
+	EN	LMS Media Library rescan already in progress!
+	NL	LMS media collectie opnieuw scannen wordt reeds uitgevoerd!
+LABEL_RESCAN_LMS_MEDIA_LIBRARY_NOT_SUPPORTED
+	EN	LMS Media Library rescan is not supported in this version of piCorePlayer!
+	NL	LMS media collectie opnieuw scannen wordt niet ondersteund in deze versie van piCorePlayer!
+LABEL_RESCAN_LMS_MEDIA_LIBRARY_NOT_CONNECTED
+	EN	Player is not connected to Logitech Media Server!
+	NL	Speler is niet verbonden met Logitech Media Server!
+LABEL_ERROR_NO_PICOREPLAYER_VERSION_FOUND
+	EN	Are you sure you are running this applet on piCorePlayer?!?
+	NL	Weet je zeker dat deze applet wordt uitgevoerd op piCorePlayer?!?
+LABEL_WOL_SEND_WOL_PACKET
+	EN	Magic Packet has been sent to
+	NL	Magic Packet is verstuurd naar
+LABEL_WOL_ERROR_NO_LMS_MAC_ADDRESS
+	EN	No LMS MAC address defined!
+	NL	Er is geen LMS MAC adres gedefinieerd!
+LABEL_WOL_ERROR_NO_NETWORK_INTERFACE
+	EN	No network interface defined!
+	NL	Er is geen netwerk interface gedefinieerd!
+LABEL_WOL_ERROR_NO_ENABLE_WOL
+	EN	Enable WOL (true|false) not defined!
+	NL	WOL aanzetten (true|false) niet gedefinieerd!
+LABEL_WOL_KEYBOARD_TITLE
+	EN	LMS MAC Address
+	NL	LMS MAC adres
+LABEL_WOL_PCP_CONFIG_SAVE_SUCCES
+	EN	All WOL settings succesfully updated in config.cfg.\nDon't forget to use 'Save Settings to SD Card' to make these changes persistent!
+	NL	Alle WOL instellingen succesvol bijgewerkt in config.cfg.\nVergeet niet om m.b.v. 'Instellingen opslaan op SD kaart' de veranderingen permanent te maken!
+LABEL_WOL_PCP_CONFIG_SAVE_WARNING
+	EN	Not all WOL settings could be updated (please check config.cfg)!
+	NL	Niet alle WOL instellingen konden worden bijgewerkt (controleer config.cfg)!
+LABEL_WOL_PCP_CONFIG_SAVE_ERROR
+	EN	WOL settings could not be updated (please check config.cfg)!
+	NL	WOL instellingen konden niet worden bijgewerkt (controleer config.cfg)!
