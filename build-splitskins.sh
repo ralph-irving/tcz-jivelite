@@ -1,7 +1,4 @@
 #!/bin/bash
-if [ -f jivelite_touch.tcz ]; then
-	rm jivelite_touch.tcz
-fi
 if [ -f jivelite_touch_orig.tcz ]; then
 	rm jivelite_touch_orig.tcz
 fi
@@ -10,7 +7,7 @@ if [ -d jivelite-build ]; then
 	rm -rf jivelite-build
 fi
 
-scp -p paddockd@rpi:~/source/tcz/jivelite/jivelite_touch.tcz jivelite_touch_orig.tcz
+cp -p jivelite_touch.tcz jivelite_touch_orig.tcz
 
 unsquashfs jivelite_touch_orig.tcz 
 mv squashfs-root jivelite-build
@@ -37,7 +34,11 @@ rm -rf jivelite-build/opt/jivelite/share/jive/applets/{HDGridSkin,HDSkin}
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{WQVGAlargeSkin,WQVGAsmallSkin}
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin}
 
-scp -p paddockd@rpi:~/source/tcz/jivelite/pcp.png jivelite-build/opt/jivelite/share/jive/jive/splash.png
+cp -p pcp.png jivelite-build/opt/jivelite/share/jive/jive/splash.png
+
+if [ -f jivelite_touch.tcz ]; then
+	rm jivelite_touch.tcz
+fi
 
 mksquashfs jivelite-build jivelite_touch.tcz -all-root -no-progress
 
