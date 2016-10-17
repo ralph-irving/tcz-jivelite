@@ -30,6 +30,10 @@ fi
 
 tar -czf qvgaskins.tar.gz jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin}
 
+rm hdskins.tar.gz
+rm wqvgaskins.tar.gz
+rm qvgaskins.tar.gz
+
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{HDGridSkin,HDSkin}
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{WQVGAlargeSkin,WQVGAsmallSkin}
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin}
