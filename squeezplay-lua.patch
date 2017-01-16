@@ -1,8 +1,8 @@
 Index: src/Makefile
 ===================================================================
---- src/Makefile	(revision 582)
+--- src/Makefile	(revision 242)
 +++ src/Makefile	(working copy)
-@@ -10,15 +10,15 @@
+@@ -10,7 +10,7 @@
  # commented out things exported by main mainfile
  
  CC ?= gcc
@@ -11,6 +11,7 @@ Index: src/Makefile
  AR ?= ar
  ARFLAGS ?= rcu
  RANLIB ?= ranlib
+@@ -17,8 +17,8 @@
  RM= rm -f
  LIBS= -lm $(MYLIBS)
  
@@ -55,7 +56,7 @@ Index: src/Makefile
  	$(MAKE) all MYCFLAGS="-Os -Wall -fpic -DLUA_USE_POSIX -DLUA_USE_DLOPEN" MYLIBS="-ldl" OSXPREFIX="pwd"
 Index: src/luaconf.h
 ===================================================================
---- src/luaconf.h	(revision 582)
+--- src/luaconf.h	(revision 242)
 +++ src/luaconf.h	(working copy)
 @@ -49,7 +49,7 @@
  #if defined(LUA_USE_LINUX)

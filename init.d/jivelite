@@ -1,0 +1,58 @@
+#!/bin/sh
+
+# Version: 0.01 2015-11-19 GE
+#	Original.
+
+PNAME=Jivelite
+DESC="Jivelite"
+DAEMON=/opt/jivelite/bin/jivelite-sp
+PIDFILE=/var/run/jivelite.pid
+
+case "$1" in
+	start)
+		if [ -f $PIDFILE ]; then
+			echo "$PNAME already running."
+			exit 1
+		fi
+		echo "Starting $DESC: $PNAME..."
+		start-stop-daemon --start --quiet -b -m -p $PIDFILE --exec $DAEMON
+		;;
+	stop)
+		if [ ! -f $PIDFILE ]; then
+			echo "$PNAME is not running."
+			exit 1
+		fi
+		echo "Stopping $DESC: $PNAME..."
+		start-stop-daemon --stop --quiet -p $PIDFILE
+		sudo rm -f $PIDFILE
+		;;
+	restart)
+		echo "Restarting $DESC..."
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	force)
+		# Force should only be used for testing purposes.
+		echo "Forcing a restart of $PNAME..."
+		if [ -f $PIDFILE ]; then
+			sudo kill `cat $PIDFILE`
+			sudo rm -f $PIDFILE
+		fi
+		sudo ps | grep jivelite | grep -v grep | awk '{print $1}' | xargs kill -9
+		sleep 1
+		$0 start
+		;;
+	status)
+		# Now checking for jivelite daemon is running?
+		pidof jivelite && echo "$PNAME is running." && exit 0 || echo "$PNAME not running." && exit 1
+		;;
+	*)
+		echo
+		echo -e "Usage: $0 [start|stop|restart|force|status]"
+		echo
+		exit 1
+		;;
+esac
+
+exit 0
