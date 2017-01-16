@@ -15,8 +15,6 @@ function registerApplet(self)
     self:registerService('getBacklightBrightnessWhenOn')
     self:registerService('getBacklightBrightnessWhenOff')
     self:registerService('getEnablePowerOnButtonWhenOff')
-    
-    jiveMain:addItem(self:menuItem('piCorePlayerApplet', 'settings', "piCorePlayer", function(applet, ...) applet:menu(...) end, 100))
 end
 
 function defaultSettings(self)
@@ -28,6 +26,21 @@ function defaultSettings(self)
 end
 
 function configureApplet(self)
+	-- we only register the menu her, as registerApplet is being called before the skin is initialized
+    jiveMain:addItem(
+    	self:menuItem(
+    		'piCorePlayerApplet',
+    		'settings',
+    		'piCorePlayer',
+    		function(applet, ...) 
+    			applet:menu(...)
+    		end,
+    		100,
+    		nil,
+    		jiveMain:getSkinParamOrNil('piCorePlayerStyle')
+    	)
+    )
+
     if self:getSettings()['pcp_rpi_display_brightness'] then
         _write("/sys/class/backlight/rpi_backlight/brightness", self:getSettings()['pcp_rpi_display_brightness'])
     end
