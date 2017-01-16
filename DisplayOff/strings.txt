@@ -3,6 +3,7 @@
 # http://en.wikipedia.org/wiki/List_of_ISO_639_codes
 
 SCREENSAVER_DISPLAYOFF
+	DE	Bildschirm ausschalten
 	EN	Display Off
 	NL	Scherm uit
 
