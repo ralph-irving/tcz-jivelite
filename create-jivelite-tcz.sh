@@ -142,7 +142,7 @@ echo -e "Title:\t\tpcp-$JIVELITE.tcz" > $TCZINFO
 echo -e "Description:\tLightweight headless squeezebox player." >> $TCZINFO
 echo -e "Version:\t$JIVELITEVERSION" >> $TCZINFO
 echo -e "Commit:\t\t$(cd $SRC; git show | grep commit | awk '{print $2}')" >> $TCZINFO
-echo -e "Authors:\tAdrian Smith, Ralph Irving" >> $TCZINFO
+echo -e "Authors:\tAdrian Smith, Ralph Irving, Michael Herger" >> $TCZINFO
 echo -e "Original-site:\t$(grep url $SRC/.git/config | awk '{print $3}')" >> $TCZINFO
 echo -e "Copying-policy:\tGPLv3" >> $TCZINFO
 echo -e "Size:\t\t$(ls -lk pcp-$JIVELITE.tcz | awk '{print $5}')k" >> $TCZINFO
