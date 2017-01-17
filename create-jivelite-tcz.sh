@@ -69,7 +69,6 @@ cp -p $OUTPUT/../pcp.png share/jive/jive/splash.png
 # Allow jivelite to receive power off notifications
 patch -p0 -i$OUTPUT/../pcp-JiveMain-lua.patch
 patch -p0 -i$OUTPUT/../pcp-ScreenSaversApplet-lua.patch
-patch -p0 -i$OUTPUT/../pcp-SlimMenus-lua.patch
 patch -p0 -i$OUTPUT/../pcp-System-lua.patch
 
 # Set JogglerSkin as the default.
