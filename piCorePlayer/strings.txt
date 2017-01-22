@@ -1,4 +1,4 @@
-﻿MENU_REBOOT
+MENU_REBOOT
 	DA	Reboot piCorePlayer
 	DE	piCorePlayer neu starten
 	EN	Reboot piCorePlayer
