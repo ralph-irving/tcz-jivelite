@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# tce-load -i compiletc squashfs-tools git readline-dev libasound-dev patchelf svnclient pcp-squeezeplay-dev
+#
 JIVELITE=jivelite
 JIVELITEVERSION=0.1.0
 SRC=${JIVELITE}
@@ -9,6 +11,7 @@ LUAOUTPUT=$PWD/lua-build
 TCZ="${JIVELITE}_touch.tcz"
 TCZINFO="pcp-${JIVELITE}.tcz.info"
 LUATCZ="pcp-lua.tcz"
+LUATCZINFO="${LUATCZ}.info"
 
 # Build requires these extra packages in addition to the raspbian 7.6 build tools
 # sudo apt-get install squashfs-tools bsdtar
@@ -44,13 +47,12 @@ mkdir -p $OUTPUT/opt/jivelite/lib
 cp -pr lib $OUTPUT/opt/jivelite
 cp -pr share $OUTPUT/opt/jivelite
 
-# Install shared libraries from squeezeplay build
-cd /opt/squeezeplay/lib
+cd /tmp/tcloop/pcp-squeezeplay/opt/squeezeplay/lib
 tar -cf - libexpat.so* libfreetype.so* libjpeg.so* libpng.so* libpng12.so* libSDL_gfx.so* libSDL_image-1.2.so.* libSDL_ttf-2.0.so* libSDL-1.2.so* | (cd $OUTPUT/opt/jivelite/lib; tar -xvf -)
 
 # Install lua
-cp -p $OUTPUT/../$SRC/lua-5.1.1/src/{lua,luac} $OUTPUT/opt/jivelite/bin
-cp -p $OUTPUT/../$SRC/lua-5.1.1/src/liblua.so $OUTPUT/opt/jivelite/lib
+cp -p $OUTPUT/../$SRC/lua-5.1.5/src/{lua,luac} $OUTPUT/opt/jivelite/bin
+cp -p $OUTPUT/../$SRC/lua-5.1.5/src/liblua.so $OUTPUT/opt/jivelite/lib
 
 # Remove user contributed VU Meters, they are installed as tcz packages
 cd $OUTPUT/opt/jivelite || exit 1
@@ -79,7 +81,8 @@ find lib -type f -name '*so*' -exec patchelf --set-rpath "/opt/jivelite/lib" {} 
 
 # Include /usr/local/lib in library search patch so SDL/SDLgfx can load libts
 patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL-1.2.so.0.11.4
-patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL_gfx.so.13.9.1
+#patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL_gfx.so.13.9.1
+patchelf --set-rpath "/opt/jivelite/lib:/usr/local/lib" lib/libSDL_gfx.so.0.0.15
 find bin -type f -exec patchelf --set-rpath "/opt/jivelite/lib" {} \;
 
 # Keep the install as small as possible
@@ -135,17 +138,42 @@ fi
 mksquashfs $LUAOUTPUT $LUATCZ -all-root -no-progress >> $LOG
 md5sum `basename $LUATCZ` > $LUATCZ.md5.txt
 
+cd $LUAOUTPUT >> $LOG
+find * -not -type d > $OUTPUT/../${LUATCZ}.list
+ 
 cd $OUTPUT/../
+echo -e "Title:\t\t$LUATCZ" > $LUATCZINFO
+echo -e "Description:\tLua a powerful, efficient, lightweight, embeddable scripting language." >> $LUATCZINFO
+echo -e "Version:\t5.1.5" >> $LUATCZINFO
+echo -e "Commit:\t\t$(cd $SRC/lua-5.1.5; svn info | grep Revision: | awk '{printf "%d", $2}')" >> $LUATCZINFO
+echo -e "Authors:\thttp://www.lua.org/authors.html" >> $LUATCZINFO
+echo -e "Original-site:\thttp://www.lua.org/" >> $LUATCZINFO
+echo -e "Copying-policy:\tMIT http://www.lua.org/license.html" >> $LUATCZINFO
+echo -e "Size:\t\t$(ls -lk $LUATCZ | awk '{print $5}')" >> $LUATCZINFO
+echo -e "Extension_by:\tpiCorePlayer team: https://sites.google.com/site/picoreplayer" >> $LUATCZINFO
+echo -e "\t\tCompiled for piCore 10.2" >> $LUATCZINFO
+
 ./split-jivelite-tcz.sh
 
 echo -e "Title:\t\tpcp-$JIVELITE.tcz" > $TCZINFO
-echo -e "Description:\tLightweight headless squeezebox player." >> $TCZINFO
+echo -e "Description:\tCommunity squeezebox controller." >> $TCZINFO
 echo -e "Version:\t$JIVELITEVERSION" >> $TCZINFO
 echo -e "Commit:\t\t$(cd $SRC; git show | grep commit | awk '{print $2}')" >> $TCZINFO
 echo -e "Authors:\tAdrian Smith, Ralph Irving, Michael Herger" >> $TCZINFO
 echo -e "Original-site:\t$(grep url $SRC/.git/config | awk '{print $3}')" >> $TCZINFO
 echo -e "Copying-policy:\tGPLv3" >> $TCZINFO
-echo -e "Size:\t\t$(ls -lk pcp-$JIVELITE.tcz | awk '{print $5}')k" >> $TCZINFO
+echo -e "Size:\t\t$(ls -lk pcp-$JIVELITE.tcz | awk '{print $5}')" >> $TCZINFO
 echo -e "Extension_by:\tpiCorePlayer team: https://sites.google.com/site/picoreplayer" >> $TCZINFO
-echo -e "\t\tCompiled for piCore 8.x" >> $TCZINFO
+echo -e "\t\tCompiled for piCore 10.2" >> $TCZINFO
 
+./create-vumeters-tcz.sh
+
+cp -p $TCZINFO pcp-jivelite_hdskins.tcz.info
+sed -i "s#pcp-$JIVELITE.tcz#pcp-jivelite_hdskins.tcz#" pcp-jivelite_hdskins.tcz.info
+sed -i -e '/^Size:*/d' pcp-jivelite_hdskins.tcz.info
+cp -p $TCZINFO pcp-jivelite_qvgaskins.tcz.info
+sed -i "s#pcp-$JIVELITE.tcz#pcp-jivelite_qvgaskins.tcz#" pcp-jivelite_qvgaskins.tcz.info
+sed -i -e '/^Size:*/d' pcp-jivelite_qvgaskins.tcz.info
+cp -p $TCZINFO pcp-jivelite_wqvgaskins.tcz.info
+sed -i "s#pcp-$JIVELITE.tcz#pcp-jivelite_wqvgaskins.tcz#" pcp-jivelite_wqvgaskins.tcz.info
+sed -i -e '/^Size:*/d' pcp-jivelite_wqvgaskins.tcz.info

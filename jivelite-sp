@@ -10,5 +10,5 @@ export JIVE_FRAMERATE=22
 
 while true; do
     sleep 3
-    /opt/jivelite/bin/jivelite > /dev/null 2>&1
+    /opt/jivelite/bin/jivelite >> /var/log/jivelite.log 2>&1
 done

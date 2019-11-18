@@ -50,7 +50,7 @@ Index: src/Makefile
  
  linux:
 -	$(MAKE) all MYCFLAGS="-O2 -Wall -fpic -DLUA_USE_LINUX" MYLIBS="-ldl -lreadline -lhistory -lcurses" OSXPREFIX="pwd"
-+	$(MAKE) all MYCFLAGS="-s -O3 -march=armv6 -mfloat-abi=hard -mfpu=vfp -DLUA_USE_LINUX" MYLIBS="-ldl" OSXPREFIX="pwd"
++	$(MAKE) all MYCFLAGS="-s -O2 -DLUA_USE_LINUX" MYLIBS="-ldl" OSXPREFIX="pwd"
  
  squeezeos:
  	$(MAKE) all MYCFLAGS="-Os -Wall -fpic -DLUA_USE_POSIX -DLUA_USE_DLOPEN" MYLIBS="-ldl" OSXPREFIX="pwd"

@@ -38,7 +38,10 @@ fi
 
 mksquashfs jivelite-build pcp-jivelite.tcz -all-root -no-progress
 md5sum pcp-jivelite.tcz > pcp-jivelite.tcz.md5.txt
-
+cd jivelite-build
+find * -not -type d > ../pcp-jivelite.tcz.list
+cd ..
+  
 rm -rf jivelite-build
 tar -xzf hdskins.tar.gz
 
@@ -48,6 +51,9 @@ fi
 
 mksquashfs jivelite-build pcp-jivelite_hdskins.tcz -all-root -no-progress
 md5sum pcp-jivelite_hdskins.tcz > pcp-jivelite_hdskins.tcz.md5.txt
+cd jivelite-build
+find * -not -type d > ../pcp-jivelite_hdskins.tcz.list
+cd ..
 
 rm -rf jivelite-build
 tar -xzf wqvgaskins.tar.gz
@@ -58,6 +64,9 @@ fi
 
 mksquashfs jivelite-build pcp-jivelite_wqvgaskins.tcz -all-root -no-progress
 md5sum pcp-jivelite_wqvgaskins.tcz > pcp-jivelite_wqvgaskins.tcz.md5.txt
+cd jivelite-build
+find * -not -type d > ../pcp-jivelite_wqvgaskins.tcz.list
+cd ..
 
 rm -rf jivelite-build
 tar -xzf qvgaskins.tar.gz
@@ -68,6 +77,9 @@ fi
 
 mksquashfs jivelite-build pcp-jivelite_qvgaskins.tcz -all-root -no-progress
 md5sum pcp-jivelite_qvgaskins.tcz > pcp-jivelite_qvgaskins.tcz.md5.txt
+cd jivelite-build
+find * -not -type d > ../pcp-jivelite_qvgaskins.tcz.list
+cd ..
 
 rm -rf jivelite-build
 rm hdskins.tar.gz

@@ -1,0 +1,10 @@
+Title:		VU_Meter_Logitech_White.tcz
+Description:	Community squeezebox controller.
+Version:	0.1.0
+Commit:		b4aff097e3a3ee1769087771215637a4562d0cbf
+Authors:	Adrian Smith, Ralph Irving, Michael Herger
+Original-site:	https://github.com/ralph-irving/jivelite.git
+Copying-policy:	GPLv3
+Size:		393216
+Extension_by:	piCorePlayer team: https://sites.google.com/site/picoreplayer
+		Compiled for piCore 10.x

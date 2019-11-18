@@ -37,7 +37,7 @@ Index: lib-src/lua-cjson-2.1.0/Makefile
 +PREFIX =            /opt/squeezeplay
  #CFLAGS =            -g -Wall -pedantic -fno-inline
 -CFLAGS =            -O3 -Wall -pedantic -DNDEBUG
-+CFLAGS =            -s -O3 -march=armv6 -mfloat-abi=hard -mfpu=vfp -Wall -pedantic -DNDEBUG
++CFLAGS =            -s -O2 -Wall -pedantic -DNDEBUG
  CJSON_CFLAGS =      -fpic
  #CJSON_LDFLAGS =     -shared
 -LUA_INCLUDE_DIR =   $(PREFIX)/include/luajit-2.0
@@ -84,7 +84,7 @@ Index: lib-src/luafilesystem-1.6.2/config
  
  # Compilation directives
 -WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
-+WARN= -s -O3 -march=armv6 -mfloat-abi=hard -mfpu=vfp -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
++WARN= -s -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
  INCS= -I$(LUA_INC)
  CFLAGS= $(WARN) $(INCS)
  CC= gcc
@@ -119,9 +119,9 @@ Index: lib-src/luazipfilter/Makefile
 --- lib-src/luazipfilter/Makefile	(revision 784)
 +++ lib-src/luazipfilter/Makefile	(working copy)
 @@ -1,5 +1,5 @@
--CFLAGS  = -O2 -I$(PREFIX)/include/luajit-2.0 -fPIC
+-CFLAGS  += -O2 -I$(PREFIX)/include/luajit-2.0 -fPIC
 -LDFLAGS = $(MYLDFLAGS) -lz
-+CFLAGS  = -I$(PREFIX)/include -fPIC -s -O3 -march=armv6 -mfloat-abi=hard -mfpu=vfp
++CFLAGS  += -s -O2 -I$(PREFIX)/include -fPIC
 +LDFLAGS = $(MYLDFLAGS) -lz -L/opt/jivelite/lib -L/opt/squeezeplay/lib
  
  SOURCES = luazipfilter.c
@@ -136,7 +136,7 @@ Index: src/Makefile
  
 -CFLAGS  += -I. -I$(PREFIX)/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC
 -LDFLAGS += -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1 -lm -lpthread
-+CFLAGS  += -I. -I$(PREFIX)/include -I$(PREFIX)/include/SDL -Wall -fPIC -DOPTJIVELITE -s -O3 -march=armv6 -mfloat-abi=hard -mfpu=vfp
++CFLAGS  += -I. -I$(PREFIX)/include -I$(PREFIX)/include/SDL -Wall -fPIC -DOPTJIVELITE -s -O2
 +LDFLAGS +=-lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -L/opt/jivelite/lib -L$(PREFIX)/lib -llua -lm -lpthread
  EXE = ../bin/jivelite
  
