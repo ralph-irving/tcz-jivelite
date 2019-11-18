@@ -1,216 +1,262 @@
 MENU_REBOOT
+	DA	Reboot piCorePlayer
 	DE	piCorePlayer neu starten
 	EN	Reboot piCorePlayer
 	NL	piCorePlayer opnieuw opstarten
 	
 MENU_SHUTDOWN
+	DA	Adslut piCorePlayer
 	DE	piCorePlayer herunterfahren
 	EN	Shutdown piCorePlayer
 	NL	piCorePlayer afsluiten
 
 MENU_ADJUST_BRIGHTNESS
+	DA	Juster baggrundbelysning
 	DE	Hintergrundbeleuchtung anpassen
 	EN	Adjust Display Backlight Brightness
 	NL	Helderheid scherm aanpassen
 
 MENU_ADJUST_BRIGHTNESS_WHEN_OFF
+	DA	Baggrundsbelysning når der ikke afspilles   
 	DE	Hintergrundbeleuchtung in ausgeschalteten Zustand
 	EN	Adjust Display Backlight Brightness when Powered Off
 	NL	Helderheid scherm aanpassen wanneer de speler uit staat
 	
 MENU_SAVE_SETTINGS
+	DA	Gem indstillinger på SD-kort
 	DE	Einstellungen auf SD Karte speichern
 	EN	Save Settings to SD Card
 	NL	Instellingen opslaan op SD kaart
 
 MENU_RESCAN_LMS_MEDIA_LIBRARY
+	DA	Rescan LMS medie bibliotek
 	DE	LMS Sammlung neu durchsuchen
 	EN	Rescan LMS Media Library
 	NL	LMS media collectie opnieuw scannen
 
 MENU_WAKE_ON_LAN
+	DA	Wake-on-LAN
+	DE	Wake-on-LAN
 	EN	Wake-on-LAN
 	NL	Wake-on-LAN
 
 MENU_ENABLE_POWER_ON_BUTTON_WHEN_OFF
+	DA	Tillad Tænd knap når afspiller er slukket
 	DE	Einschaltknopf anzeigen wenn ausgeschaltet
 	EN	Enable Power On Button when Powered Off
 	NL	Toon aan/uit-knop wanneer de speler uit staat
 
 WOL_MENU_TITLE
+	DA	Wake-on-LAN
+	DE	Wake-on-LAN
 	EN	Wake-on-LAN
 	NL	Wake-on-LAN
 
 WOL_MENU_SEND_WOL_PACKET
+	DA	Send Magisk pakke
 	DE	Magic-Packet senden
 	EN	Send Magic Packet
 	NL	Verstuur Magic Packet
 
 WOL_MENU_LMS_MAC_ADDRESS
+	DA	LMS MAC IP adresse
 	EN	LMS MAC Address
 	NL	LMS MAC adres
 
 WOL_MENU_NETWORK_INTERFACE
+	DA	Netværks adresse 
 	DE	Netzwerk Schnittstelle
 	EN	Network Interface
 	NL	Netwerk interface
 
 WOL_MENU_ENABLE_WOL_IN_PCP_CONFIG
+	DA	Tillad piCorePlayer at vække LMS via Wake-on-LAN 
 	DE	Wake-on-LAN in piCorePlayer aktivieren
 	EN	Enable WOL in piCorePlayer Config File
 	NL	WOL aanzetten in piCorePlayer configuratie bestand
 
 WOL_MENU_UPDATE_PCP_CONFIG
+	DA	Opdater Wake-on-LAN indstillinger i piCorePlayer 
 	DE	Wake-on-LAN Einstellungen in piCorePlayer Konfiguration aktualisieren
 	EN	Update WOL Settings in piCorePlayer Config File
 	NL	Werk WOL instellingen bij in piCorePlayer configuratie bestand
 
 LABEL_ADJUST_BRIGHTNESS_WHEN_OFF
+	DA	Niveau af baggrundsbelysning når slukket
 	DE	Helligkeit der Hintergrundbeleuchtung wenn ausgeschaltet:
 	EN	Backlight Brightness when Powered Off:
 	NL	Helderheid wanneer de speler uit staat:
 	
 HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF
+	DA	\nJuster baggrundsbelysningen når afspilleren er slukket (intet visuelt feedback!). \n\nPress (volume) op/ned for at ændre lysstyrken eller brug 0..9 for at sætte niveuet som procent af maximum (0 = 100%, 1 = 10%, 2 = 20%, ...). Tryk på Hjem for at afslutte.
 	DE	\nHintergrundhelligkeit anpassen, wenn der Player ausgeschaltet ist (kein visuelles Feedback!). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit au einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
 	EN	\nAdjust backlight brightness when player is powered off (no visual feedback!). \n\nPress (volume) up/down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
 	NL	\nAanpassen van de helderheid wanneer de speler uit staat (geen visuele terugkoppeling!). \n\nDruk op (volume) hoger/lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
 
 LABEL_ADJUST_BRIGHTNESS
+	DA	Baggrundsbelysning:
 	DE	Helligkeit der Hintergrundbeleuchtung:
 	EN	Backlight Brightness:
 	NL	Helderheid:
 
 HELP_TEXT_ADJUST_BRIGHTNESS
+	DA	\nJustering af baggrundsbelysning er kun muligt med skærme der benytter PCB v1.1 eller senere. Tidligere modeller er enten slukket ved (0-127) eller tændt (128-255). \n\nPress (volume) op/ned for at ændre lysstyrken eller brug 0..9 for at sætte niveuet som procent af maximum (0 = 100%, 1 = 10%, 2 = 20%, ...). Tryk på Hjem for at afslutte.
 	DE	\nDie Helligkeit der Hintergrundbeleuchtung lässt sich nur auf PCB v1.1 Displays anpassen. Ältere Versionen schalten zwischen aus (0-127) und ein (128-255). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit au einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
-	EN	\nAdjusting backlight brightness works only on PCB v1.1 displays. Older revisions toggle between backlight off (0-127) and backlight on (128-255).\n\nPress (volume) up/down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
+	EN	\nAdjusting backlight brightness works only on PCB v1.1 displays. Older revisions toggle between backlight off (0-127) and backlight on (128-255).\n\nPress (volume) up\down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
 	NL	\nAanpassen van de helderheid werkt alleen in combinatie met PCB v1.1 schermen. Oudere sherm revisies schakelen tussen achtergrondverlichting uit (0-127) en aan (128-255).\n\nDruk op (volume) hoger/lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
 
 LABEL_NO_DISPLAY_FOUND_ADJUST_BRIGHTNESS
+	DA	Der er ikke fundet en officiel Raspberry skærm! 
 	DE	Es wurde kein offizielles Raspberry Pi Display gefunden!
 	EN	No official Raspberry Pi display found!
 	NL	Geen officieel Raspberry Pi scherm gedetecteerd!
 
 LABEL_REBOOT_IN_PROGRESS
+	DA	Genstarter om
 	DE	Neustart in
 	EN	Reboot in
 	NL	Opnieuw opstarten in
 
 LABEL_REBOOTING
+	DA	Genstarter!
 	DE	Neustart!
 	EN	Rebooting!
 	NL	Opnieuw opstarten!
 
 LABEL_SHUTDOWN_IN_PROGRESS
+	DA	Afslutter om
 	DE	Herunterfahren in
 	EN	Shutdown in
 	NL	Afsluiten in
 
 LABEL_SHUTTING_DOWN
+	DA	Afslutter...
 	DE	Herunterfahren...
 	EN	Shutting down!
 	NL	Afsluiten!
 	
 LABEL_COUNTDOWN_5_SECONDS
+	DA	5 sekunder
 	DE	5 Sekunden
 	EN	5 seconds
 	NL	5 seconden
 
 LABEL_COUNTDOWN_4_SECONDS
+	DA	4 sekunder
 	DE	4 Sekunden
 	EN	4 seconds
 	NL	4 seconden
 
 LABEL_COUNTDOWN_3_SECONDS
+	DA	3 sekunder
 	DE	3 Sekunden
 	EN	3 seconds
 	NL	3 seconden
 
 LABEL_COUNTDOWN_2_SECONDS
+	DA	2 sekunder
 	DE	2 Sekunden
 	EN	2 seconds
 	NL	2 seconden
 
 LABEL_COUNTDOWN_1_SECOND
+	DA	1 sekund
 	DE	1 Sekunde
 	EN	1 second
 	NL	1 seconde
 
 LABEL_SAVING_SETTINGS
+	DA	Gemmer indstillinger på SD kort
 	DE	Einstellungen werden auf SD Karte gespeichert
 	EN	Saving settings to SD card
 	NL	Instellingen worden opgeslagen op SD kaart
 
 LABEL_SETTINGS_SAVED
+	DA	Indstillinger gemt på SD kort!
 	DE	Einstellungen wurden auf SD Karte gespeichert.
 	EN	Settings saved to SD card!
 	NL	Instellingen opgeslagen op SD kaart!
 
 LABEL_RESCAN_LMS_MEDIA_LIBRARY
+	DA	Reskanner LMS media bibliotek om
 	DE	LMS Sammlung wird neu durchsucht in
 	EN	Rescan LMS Media Library in
 	NL	LMS media collectie opnieuw scannen in
 
 LABEL_RESCAN_LMS_MEDIA_LIBRARY_INITIATED
+	DA	LMS medie bibliotek skannes...
 	DE	LMS Sammlung Durchsuchen gestartet...
 	EN	LMS Media Library rescan initiated...
 	NL	LMS media collectie wordt opnieuw gescanned...
 
 LABEL_RESCAN_LMS_MEDIA_LIBRARY_IN_PROGRESS
+	DA	LMS medie bibliotek skannes allerede!
 	DE	LMS Sammlung wird bereits durchsucht!
 	EN	LMS Media Library rescan already in progress!
 	NL	LMS media collectie opnieuw scannen wordt reeds uitgevoerd!
 
 LABEL_RESCAN_LMS_MEDIA_LIBRARY_NOT_SUPPORTED
+	DA	LMS media skanning er ikke muligt i denne version af piCorePlayer!
 	DE	LMS Sammlung durchsuchen wird mit dieser piCorePlayer Version nicht unterstützt!
 	EN	LMS Media Library rescan is not supported in this version of piCorePlayer!
 	NL	LMS media collectie opnieuw scannen wordt niet ondersteund in deze versie van piCorePlayer!
 
 LABEL_RESCAN_LMS_MEDIA_LIBRARY_NOT_CONNECTED
+	DA	Afspiller er ikke forbundet til LMS 
 	DE	Player ist mit keinem Logitech Media Server verbunden!
 	EN	Player is not connected to Logitech Media Server!
 	NL	Speler is niet verbonden met Logitech Media Server!
 
 LABEL_ERROR_NO_PICOREPLAYER_VERSION_FOUND
+	DA	Er du sikker at denne applet er installeret på en piCorePlayer?
 	DE	Sind Sie sicher, dass diese Applet auf piCorePlayer ausgeführt wird?
 	EN	Are you sure you are running this applet on piCorePlayer?!?
 	NL	Weet je zeker dat deze applet wordt uitgevoerd op piCorePlayer?!?
 
 LABEL_WOL_SEND_WOL_PACKET
+	DA	Magisk pakke er afsendt
 	DE	Magic Packet wurde gesendet an
 	EN	Magic Packet has been sent to
 	NL	Magic Packet is verstuurd naar
 
 LABEL_WOL_ERROR_NO_LMS_MAC_ADDRESS
+	DA	Der er ikke defineret en LMS MAC adresse!
 	DE	Es ist keine LMS MAC Adresse definiert!
 	EN	No LMS MAC address defined!
 	NL	Er is geen LMS MAC adres gedefinieerd!
 
 LABEL_WOL_ERROR_NO_NETWORK_INTERFACE
+	DA	Der er intet netværk fundet!
 	DE	Es ist keine Netzwerk-Schnittstelle definiert!
 	EN	No network interface defined!
 	NL	Er is geen netwerk interface gedefinieerd!
 
 LABEL_WOL_ERROR_NO_ENABLE_WOL
+	DA	Wake-on-LAN er ikke aktiveret!
 	DE	Wake-on-LAN ist nicht aktiviert!
 	EN	Enable WOL (true|false) not defined!
 	NL	WOL aanzetten (true|false) niet gedefinieerd!
 
 LABEL_WOL_KEYBOARD_TITLE
+	DA	LMS MAC adresse
 	DE	LMS MAC Adresse
 	EN	LMS MAC Address
 	NL	LMS MAC adres
 
 LABEL_WOL_PCP_CONFIG_SAVE_SUCCES
+	DA	Alle Wake-on-LAN indstillinger er gemt i config.cfg.\nHusk at benytte 'Gem indstillinger på SD-kort' for at disse indstillinger bliver permanente!
 	DE	Alle Wake-on-LAN Einstellungen wurde in config.cfg gespeichert.\nVergessen Sie nicht, die Einstellungen mit "Einstellungen auf SD Karte speichern" für den Neustart zu sichern!
 	EN	All WOL settings succesfully updated in config.cfg.\nDon't forget to use 'Save Settings to SD Card' to make these changes persistent!
 	NL	Alle WOL instellingen succesvol bijgewerkt in config.cfg.\nVergeet niet om m.b.v. 'Instellingen opslaan op SD kaart' de veranderingen permanent te maken!
 
 LABEL_WOL_PCP_CONFIG_SAVE_WARNING
+	DA	Ikke alle Wake-on-LAN indstillinger kunne gemmes (check venligst config.cfg)!
 	DE	Nicht alle Wake-on-LAN Einstellungen konnten gespeichert werden (bitte config.cfg überprüfen)!
 	EN	Not all WOL settings could be updated (please check config.cfg)!
 	NL	Niet alle WOL instellingen konden worden bijgewerkt (controleer config.cfg)!
 
 LABEL_WOL_PCP_CONFIG_SAVE_ERROR
+	DA	Wake-on-LAN indstillinger kunne ikke opdateres (check venligst config.cfg)!
 	DE	Wake-on-LAN Einstellungen konnten nicht aktualisiert werden (bitte config.cfg überprüfen)!
 	EN	WOL settings could not be updated (please check config.cfg)!
 	NL	WOL instellingen konden niet worden bijgewerkt (controleer config.cfg)!
