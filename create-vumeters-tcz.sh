@@ -36,6 +36,11 @@ if [ -f VU_Meter_Logitech_White.tcz ]; then
 	rm VU_Meter_Logitech_White.tcz
 fi
 
+# VU_Meter_Blue_Glow.tcz (bg)
+
+if [ -f VU_Meter_Blue_Glow.tcz ]; then
+	rm VU_Meter_Blue_Glow.tcz
+fi
 
 if [ -d jivelite-build ]; then
 	rm -rf jivelite-build
@@ -129,5 +134,21 @@ mksquashfs jivelite-build VU_Meter_Jstraw_Dark_Peak.tcz -all-root -no-progress
 md5sum VU_Meter_Jstraw_Dark_Peak.tcz > VU_Meter_Jstraw_Dark_Peak.tcz.md5.txt
 cd jivelite-build
 find * -not -type d > ../VU_Meter_Jstraw_Dark_Peak.tcz.list
+cd ..
+
+if [ -d jivelite-build ]; then
+	rm -rf jivelite-build
+else
+	exit
+fi
+
+mkdir -p jivelite-build/opt/jivelite/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter
+cp -p vu_analog_25seq_bg.png \
+	jivelite-build/opt/jivelite/share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_w.png
+
+mksquashfs jivelite-build VU_Meter_Blue_Glow.tcz -all-root -no-progress
+md5sum VU_Meter_Blue_Glow.tcz > VU_Meter_Blue_Glow.tcz.md5.txt
+cd jivelite-build
+find * -not -type d > ../VU_Meter_Blue_Glow.tcz.list
 cd ..
 

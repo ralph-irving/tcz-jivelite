@@ -69,9 +69,9 @@ rm share/jive/applets/JogglerSkin/images/UNOFFICIAL/VUMeter/vu_analog_25seq_j.pn
 cp -p $OUTPUT/../pcp.png share/jive/jive/splash.png
 
 # Allow jivelite to receive power off notifications
-patch -p0 -i$OUTPUT/../pcp-JiveMain-lua.patch
-patch -p0 -i$OUTPUT/../pcp-ScreenSaversApplet-lua.patch
-patch -p0 -i$OUTPUT/../pcp-System-lua.patch
+patch -p0 -i$OUTPUT/../pcp-JiveMain-GenericBrightness.patch || exit 1
+patch -p0 -i$OUTPUT/../pcp-ScreenSaversApplet-lua.patch || exit 1
+patch -p0 -i$OUTPUT/../pcp-System-lua.patch || exit 1
 
 # Set JogglerSkin as the default.
 patch -p0 -i$OUTPUT/../jivelite-defaultjogglerskin.patch
@@ -130,7 +130,7 @@ mv opt/jivelite/bin/{lua,luac} usr/bin
 rmdir opt/jivelite/bin
 
 cd $LUAOUTPUT/..
-
+mv $LUAOUTPUT/opt/jivelite/lib/lua/5.1/keytableir.so  $LUAOUTPUT/opt/jivelite/lib/lua/5.1/fab4_bsp.so
 if [ -f $LUATCZ ]; then
 	rm $LUATCZ >> $LOG
 fi
@@ -151,7 +151,7 @@ echo -e "Original-site:\thttp://www.lua.org/" >> $LUATCZINFO
 echo -e "Copying-policy:\tMIT http://www.lua.org/license.html" >> $LUATCZINFO
 echo -e "Size:\t\t$(ls -lk $LUATCZ | awk '{print $5}')" >> $LUATCZINFO
 echo -e "Extension_by:\tpiCorePlayer team: https://sites.google.com/site/picoreplayer" >> $LUATCZINFO
-echo -e "\t\tCompiled for piCore 10.2" >> $LUATCZINFO
+echo -e "\t\tCompiled for piCore 10.3" >> $LUATCZINFO
 
 ./split-jivelite-tcz.sh
 
@@ -164,7 +164,7 @@ echo -e "Original-site:\t$(grep url $SRC/.git/config | awk '{print $3}')" >> $TC
 echo -e "Copying-policy:\tGPLv3" >> $TCZINFO
 echo -e "Size:\t\t$(ls -lk pcp-$JIVELITE.tcz | awk '{print $5}')" >> $TCZINFO
 echo -e "Extension_by:\tpiCorePlayer team: https://sites.google.com/site/picoreplayer" >> $TCZINFO
-echo -e "\t\tCompiled for piCore 10.2" >> $TCZINFO
+echo -e "\t\tCompiled for piCore 10.3" >> $TCZINFO
 
 ./create-vumeters-tcz.sh
 

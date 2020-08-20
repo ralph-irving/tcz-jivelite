@@ -1,14 +1,39 @@
 #!/bin/sh
+
+export LOG=/var/log/jivelite.log
+
+if [ -f /usr/local/sbin/config.cfg ]; then
+    source /usr/local/sbin/config.cfg
+fi
+
+if [ ! -z ${JL_FRAME_BUFFER} ]; then
+    export SDL_FBDEV=$JL_FRAME_BUFFER
+    echo "Using $SDL_FBDEV as frame buffer device." >> $LOG
+fi
+
+if [ -z ${JL_FRAME_RATE} ]; then
+    JL_FRAME_RATE=22
+fi
+
+export JIVE_FRAMERATE=$JL_FRAME_RATE
+
+echo "Frame rate set to $JIVE_FRAMERATE frames per second." >> $LOG
+
+if [ -z ${JL_FRAME_DEPTH} ]; then
+    JL_FRAME_DEPTH=32
+fi
+
+/usr/sbin/fbset -depth $JL_FRAME_DEPTH >> $LOG
+ 
+echo "Frame buffer color bit depth set to $JL_FRAME_DEPTH." >> $LOG
+
 if [ ! -z ${SDL_TOUCHSCREEN} ]; then
     export JIVE_NOCURSOR=1
 fi
 
 export HOME=/home/tc
-export JIVE_FRAMERATE=22
-
-/usr/sbin/fbset -depth 32
 
 while true; do
     sleep 3
-    /opt/jivelite/bin/jivelite >> /var/log/jivelite.log 2>&1
+    /opt/jivelite/bin/jivelite >> $LOG 2>&1
 done

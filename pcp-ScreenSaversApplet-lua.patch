@@ -1,8 +1,8 @@
-Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
-===================================================================
---- share/jive/applets/ScreenSavers/ScreenSaversApplet.lua	(revision 783)
-+++ share/jive/applets/ScreenSavers/ScreenSaversApplet.lua	(working copy)
-@@ -21,6 +21,10 @@
+diff --git share/jive/applets/ScreenSavers/ScreenSaversApplet.lua share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+index bc86281..76c1697 100644
+--- share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
++++ share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+@@ -21,6 +21,10 @@ ScreenSaversApplet overrides the following methods:
  -- stuff we use
  local ipairs, pairs, tostring, tonumber, bit = ipairs, pairs, tostring, tonumber, bit
  
@@ -13,7 +13,7 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
  local os               = require("os")
  local oo               = require("loop.simple")
  
-@@ -234,15 +238,17 @@
+@@ -234,15 +237,17 @@ function _activate(self, the_screensaver, force, isServerRequest)
  	end
  	local screensaver = self.screensavers[self.currentSS]
  
@@ -35,7 +35,7 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
  
  	-- check if the top window will allow screensavers, if not then
  	-- set the screensaver to activate 10 seconds after the window
-@@ -557,25 +563,32 @@
+@@ -557,25 +562,32 @@ function screensaverWindow(self, window, scrollAllowed, ssAllowedActions, mouseA
  				   return EVENT_UNUSED
  			   end)
  
@@ -57,9 +57,8 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
 -					function ()
 -						self:_showPowerOnWindow()
 -					end)
--
-+		
-+		if _read("/sys/class/backlight/rpi_backlight/brightness") ~= nil then
+ 
++		if _read("/usr/local/etc/pcp/pcpversion.cfg") ~= nil then
 +			if appletManager:callService("getEnablePowerOnButtonWhenOff") then
 +				self:_setSSAllowedActions(true, {}, true)
 +				window:ignoreAllInputExcept(    { "power", "power_on", "power_off" },
@@ -84,7 +83,7 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
  
  	log:debug("Overriding the default window action 'bump' handling to allow action to fall through to framework listeners")
  	window:removeDefaultActionListeners()
-@@ -817,8 +830,10 @@
+@@ -817,8 +829,10 @@ function openSettings(self, menuItem)
  			},
  		})
  
@@ -92,11 +91,11 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
  	-- only present a WHEN OFF option when there is a local player present
 -	if Player:getLocalPlayer() then
 +	-- or when running on piCorePlayer with an official display attached
-+	if Player:getLocalPlayer() or (_read("/usr/local/sbin/piversion.cfg") ~= nil and _read("/sys/class/backlight/rpi_backlight/brightness") ~= nil) then
++	if Player:getLocalPlayer() or _read("/usr/local/etc/pcp/pcpversion.cfg") ~= nil then
  		menu:addItem(
  			{
  				text = self:string("SCREENSAVER_WHEN_OFF"),
-@@ -830,6 +845,7 @@
+@@ -830,6 +844,7 @@ function openSettings(self, menuItem)
  			}
  		)
  	end
@@ -104,7 +103,7 @@ Index: share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
  	
  	menu:setComparator(menu.itemComparatorWeightAlpha)
  	for setting_name, screensaver in pairs(self.screensaverSettings) do
-@@ -859,7 +875,17 @@
+@@ -859,7 +874,17 @@ function openSettings(self, menuItem)
  	return window
  end
  

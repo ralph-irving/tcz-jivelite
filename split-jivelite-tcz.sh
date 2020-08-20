@@ -24,11 +24,11 @@ if [ -f qvgaskins.tar.gz ]; then
 	rm qvgaskins.tar.gz
 fi
 
-tar -czf qvgaskins.tar.gz jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin}
+tar -czf qvgaskins.tar.gz jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin,QVGA240squareSkin}
 
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{HDGridSkin,HDSkin}
 rm -rf jivelite-build/opt/jivelite/share/jive/applets/{WQVGAlargeSkin,WQVGAsmallSkin}
-rm -rf jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin}
+rm -rf jivelite-build/opt/jivelite/share/jive/applets/{QVGAbaseSkin,QVGAlandscapeSkin,QVGAportraitSkin,QVGA240squareSkin}
 
 cp -p pcp.png jivelite-build/opt/jivelite/share/jive/jive/splash.png
 

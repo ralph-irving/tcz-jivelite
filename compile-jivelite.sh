@@ -12,7 +12,7 @@ else
 	patch -p0 -i../jivelite-picoplayer.patch
 fi
 
-make
+make || exit 2
 
 if [ ! -d lua-5.1.5 ]; then
 	svn checkout https://github.com/ralph-irving/squeezeplay.git/trunk/src/lua-5.1.5

@@ -5,7 +5,7 @@ MENU_REBOOT
 	NL	piCorePlayer opnieuw opstarten
 	
 MENU_SHUTDOWN
-	DA	Adslut piCorePlayer
+	DA	Afslut piCorePlayer
 	DE	piCorePlayer herunterfahren
 	EN	Shutdown piCorePlayer
 	NL	piCorePlayer afsluiten
@@ -42,9 +42,9 @@ MENU_WAKE_ON_LAN
 
 MENU_ENABLE_POWER_ON_BUTTON_WHEN_OFF
 	DA	Tillad Tænd knap når afspiller er slukket
-	DE	Einschaltknopf anzeigen wenn ausgeschaltet
+	DE	Einschaltknopf aktivieren wenn ausgeschaltet
 	EN	Enable Power On Button when Powered Off
-	NL	Toon aan/uit-knop wanneer de speler uit staat
+	NL	Aan-knop activeren wanneer de speler uit staat
 
 WOL_MENU_TITLE
 	DA	Wake-on-LAN
@@ -81,17 +81,29 @@ WOL_MENU_UPDATE_PCP_CONFIG
 	EN	Update WOL Settings in piCorePlayer Config File
 	NL	Werk WOL instellingen bij in piCorePlayer configuratie bestand
 
-LABEL_ADJUST_BRIGHTNESS_WHEN_OFF
+LABEL_ADJUST_BRIGHTNESS_WHENOFF
 	DA	Niveau af baggrundsbelysning når slukket
 	DE	Helligkeit der Hintergrundbeleuchtung wenn ausgeschaltet:
 	EN	Backlight Brightness when Powered Off:
 	NL	Helderheid wanneer de speler uit staat:
 	
+LABEL_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC
+	DA	Lysstyrke når slukket
+	DE	'Aus' Helligkeit:
+	EN	'Off' Brightness:
+	NL	Helderheid bij 'uit':
+	
 HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF
 	DA	\nJuster baggrundsbelysningen når afspilleren er slukket (intet visuelt feedback!). \n\nPress (volume) op/ned for at ændre lysstyrken eller brug 0..9 for at sætte niveuet som procent af maximum (0 = 100%, 1 = 10%, 2 = 20%, ...). Tryk på Hjem for at afslutte.
-	DE	\nHintergrundhelligkeit anpassen, wenn der Player ausgeschaltet ist (kein visuelles Feedback!). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit au einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
+	DE	\nHintergrundhelligkeit anpassen, wenn der Player ausgeschaltet ist (kein visuelles Feedback!). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit auf einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
 	EN	\nAdjust backlight brightness when player is powered off (no visual feedback!). \n\nPress (volume) up/down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
 	NL	\nAanpassen van de helderheid wanneer de speler uit staat (geen visuele terugkoppeling!). \n\nDruk op (volume) hoger/lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
+
+HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC
+	DA	\nBrug (volume) op/ned for lysstyrke eller tast 0..9 ændrer i trin af 10% (intet visuelt feedback). Tryk på Hjem eller ESC for at afslutte.
+	DE	\nDrücke auf/ab (kein visuelles Feedback!), oder 0-9 Tasten um in 10% Schritten anzupassen.\nHome oder ESC, um zurückzukehren.
+	EN	\nPress up or down to change (no visual feedback!)\nor press 0..9 keys to set the level in 10% increments.\nPress HOME or ESC to exit.
+	NL	\nGebruik [volume] voor helderheid aanpassing. Gebruik toetsen  0..9 voor ( 1 = 10%, 2 = 20%, ..., 0 = 100%). [home]of[esc] voor einde.
 
 LABEL_ADJUST_BRIGHTNESS
 	DA	Baggrundsbelysning:
@@ -99,11 +111,23 @@ LABEL_ADJUST_BRIGHTNESS
 	EN	Backlight Brightness:
 	NL	Helderheid:
 
+LABEL_ADJUST_BRIGHTNESS_GENERIC
+	DA	Lysstyrke:
+	DE	Helligkeit:
+	EN	Brightness:
+	NL	Helderheid:
+
 HELP_TEXT_ADJUST_BRIGHTNESS
 	DA	\nJustering af baggrundsbelysning er kun muligt med skærme der benytter PCB v1.1 eller senere. Tidligere modeller er enten slukket ved (0-127) eller tændt (128-255). \n\nPress (volume) op/ned for at ændre lysstyrken eller brug 0..9 for at sætte niveuet som procent af maximum (0 = 100%, 1 = 10%, 2 = 20%, ...). Tryk på Hjem for at afslutte.
-	DE	\nDie Helligkeit der Hintergrundbeleuchtung lässt sich nur auf PCB v1.1 Displays anpassen. Ältere Versionen schalten zwischen aus (0-127) und ein (128-255). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit au einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
+	DE	\nDie Helligkeit der Hintergrundbeleuchtung lässt sich nur auf PCB v1.1 Displays anpassen. Ältere Versionen schalten zwischen aus (0-127) und ein (128-255). \n\nLautstärke hoch/runter drücken, um die Helligkeit anzupassen, oder Tasten 0-9 verwenden, um die Helligkeit auf einen Prozentwert des Maximums festzulegen (0 = 100%, 1 = 10%, 2 = 20%, ...). Home drücken, um zurückzukehren.
 	EN	\nAdjusting backlight brightness works only on PCB v1.1 displays. Older revisions toggle between backlight off (0-127) and backlight on (128-255).\n\nPress (volume) up\down to change the brightness level or press the 0..9 keys to set the level to a percentage of the maximum value (0 = 100%, 1 = 10%, 2 = 20%, ...). Press home to exit.
 	NL	\nAanpassen van de helderheid werkt alleen in combinatie met PCB v1.1 schermen. Oudere sherm revisies schakelen tussen achtergrondverlichting uit (0-127) en aan (128-255).\n\nDruk op (volume) hoger/lager om de helderheid aan te passen of gebruik de 0..9 toetsen om percentuele aanpassingen te maken (0 = 100%, 1 = 10%, 2 = 20%, ...). Druk op home om terug te keren.
+
+HELP_TEXT_ADJUST_BRIGHTNESS_GENERIC
+	DA	\nPress (volume) op/ned for at ændre lysstyrken eller tast 0..9 for at ændre i trin af 10%. Tryk på Hjem eller ESC for at afslutte.
+	DE	\nDrücke auf/ab um die Helligkeit anzupassen, oder 0-9 Tasten um in 10% Schritten anzupassen.\nHome oder ESC, um zurückzukehren.
+	EN	\nPress up or down to change the brightness level or press the 0..9 keys to set the level in 10% increments.\nPress HOME or ESC to exit.
+	NL	\nGebruik [volume] voor helderheid aanpassing. Gebruik toetsen  0..9 voor ( 1 = 10%, 2 = 20%, ..., 0 = 100%). [home]of[esc] voor einde.
 
 LABEL_NO_DISPLAY_FOUND_ADJUST_BRIGHTNESS
 	DA	Der er ikke fundet en officiel Raspberry skærm! 

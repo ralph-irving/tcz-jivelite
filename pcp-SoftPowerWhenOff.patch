@@ -1,0 +1,24 @@
+diff --git share/jive/applets/ScreenSavers/ScreenSaversApplet.lua share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+index bc86281..2a993b5 100644
+--- share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
++++ share/jive/applets/ScreenSavers/ScreenSaversApplet.lua
+@@ -340,11 +340,14 @@ end
+ 
+ function _getMode(self)
+ 	local player = appletManager:callService("getCurrentPlayer")
+-	if not self:isSoftPowerOn() and System:hasSoftPower() then
+-		return 'whenOff'
+-	else
+-		if player and player:getPlayMode() == "play" then
+-			return 'whenPlaying'
++	
++	if player then
++		if not player:isPowerOn() then
++			return 'whenOff'
++		else
++			if player:getPlayMode() == "play" then
++				return 'whenPlaying'
++			end
+ 		end
+ 	end
+ 	return 'whenStopped'
