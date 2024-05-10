@@ -13,7 +13,7 @@ LUATCZINFO="${LUATCZ}.info"
 ARCH=$(uname -m)
 
 # Build requires these extensions
-tce-load -i squashfs-tools git libasound-dev patchelf pcp-squeezeplay-dev svnclient pcp-lirc-dev pcp-lirc
+tce-load -i squashfs-tools git libasound-dev patchelf pcp-squeezeplay pcp-squeezeplay-dev pcp-lirc-dev pcp-lirc
 
 ## Start
 echo "Most log mesages sent to $LOG... only 'errors' displayed here"
