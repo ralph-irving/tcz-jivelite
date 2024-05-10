@@ -1,0 +1,184 @@
+diff --git a/Makefile b/Makefile
+index 3e7161e..56301d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ # Jivelite makefile
+ 
+ # set PREFIX for location of luajit include and libs
+-PREFIX ?= /usr/local
++PREFIX ?= /opt/squeezeplay
+ 
+ ifeq ($(shell uname -m), aarch64)
+         LUAJIT_VERSION = 2.1
+diff --git a/lib-src/Makefile b/lib-src/Makefile
+index fc643e4..41e8501 100644
+--- a/lib-src/Makefile
++++ b/lib-src/Makefile
+@@ -3,9 +3,10 @@
+ 
+ TARGET   ?= linux
+ 
+-LD_FLAGS ?= "-shared"
++LD_FLAGS ?= "-shared -L/opt/squeezeplay/lib -Wl,-rpath,/opt/jivelite/lib"
++FLAGS ?= "-mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -s -O2"
+ 
+-LIBS = cjson luaexpat luafilesystem luamd5 luasocket luazipfilter
++LIBS = cjson luaexpat luafilesystem luamd5 luasocket luazipfilter irbsp
+ 
+ all: $(LIBS)
+ 
+@@ -15,6 +16,7 @@ luafilesystem: ../lib/lua/5.1/lfs.so
+ luamd5: ../lib/lua/5.1/md5.so
+ luasocket: ../lib/lua/5.1/socket.so
+ luazipfilter: ../lib/lua/5.1/zipfilter.so
++irbsp: ../lib/lua/5.1/ir_bsp.so
+ 
+ ../lib/lua/5.1/cjson.so:
+ 	cd lua-cjson-2.1.0; make CJSON_LDFLAGS=${LD_FLAGS}
+@@ -49,6 +51,12 @@ luazipfilter: ../lib/lua/5.1/zipfilter.so
+ 	mkdir -p ../lib/lua/5.1
+ 	cp luazipfilter/zipfilter.so ../lib/lua/5.1/zipfilter.so
+ 
++
++../lib/lua/5.1/ir_bsp.so:
++	cd lirc-bsp; make -f Makefile.jivelite
++	mkdir -p ../lib/lua/5.1
++	cp lirc-bsp/ir_bsp.so ../lib/lua/5.1/ir_bsp.so
++	
+ clean:
+ 	cd lua-cjson-2.1.0; make clean
+ 	cd luaexpat-1.2.0; make clean
+@@ -57,5 +65,6 @@ clean:
+ 	cd luamd5; make MYNAME=md5 clean
+ 	cd luasocket-2.0.2; make PLATFORM=${TARGET} clean
+ 	cd luazipfilter; make clean
+-	rm ../lib/lua/5.1/cjson.so ../lib/lua/5.1/lxp.so ../lib/lua/5.1/lfs.so ../lib/lua/5.1/socket.so ../lib/lua/5.1/mime.so ../lib/lua/5.1/zipfilter.so ../lib/lua/5.1/md5.so ../lib/lua/5.1/sha1.so
++	cd lirc-bsp; make -f Makefile.jivelite clean
++	rm ../lib/lua/5.1/cjson.so ../lib/lua/5.1/lxp.so ../lib/lua/5.1/lfs.so ../lib/lua/5.1/socket.so ../lib/lua/5.1/mime.so ../lib/lua/5.1/zipfilter.so ../lib/lua/5.1/md5.so ../lib/lua/5.1/sha1.so ../lib/lua/5.1/ir_bsp.so
+ 
+diff --git a/lib-src/lua-cjson-2.1.0/Makefile b/lib-src/lua-cjson-2.1.0/Makefile
+index 2b14746..219cce8 100644
+--- a/lib-src/lua-cjson-2.1.0/Makefile
++++ b/lib-src/lua-cjson-2.1.0/Makefile
+@@ -13,12 +13,12 @@
+ ##### Build defaults #####
+ LUA_VERSION =       5.1
+ TARGET =            cjson.so
+-PREFIX ?=           /usr/local
++PREFIX ?=           /opt/squeezeplay
+ #CFLAGS =            -g -Wall -pedantic -fno-inline
+-CFLAGS +=            -O3 -Wall -pedantic -DNDEBUG
++CFLAGS +=            -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -s -O2 -Wall -pedantic -DNDEBUG
+ CJSON_CFLAGS =      -fpic
+ #CJSON_LDFLAGS =     -shared
+-LUA_INCLUDE_DIR =   $(PREFIX)/include/luajit-$(LUAJIT_VERSION)
++LUA_INCLUDE_DIR =   $(PREFIX)/include
+ LUA_CMODULE_DIR =   $(PREFIX)/lib/lua/$(LUA_VERSION)
+ LUA_MODULE_DIR =    $(PREFIX)/share/lua/$(LUA_VERSION)
+ LUA_BIN_DIR =       $(PREFIX)/bin
+diff --git a/lib-src/luaexpat-1.2.0/config b/lib-src/luaexpat-1.2.0/config
+index 4f94f31..bed3778 100644
+--- a/lib-src/luaexpat-1.2.0/config
++++ b/lib-src/luaexpat-1.2.0/config
+@@ -4,7 +4,7 @@ LUA_LIBDIR= $(PREFIX)/lib/lua/5.1
+ # System's lua directory (where Lua libraries are installed)
+ LUA_DIR= $(PREFIX)/share/lua/5.1
+ # Lua includes directory
+-LUA_INC= $(PREFIX)/include/luajit-$(LUAJIT_VERSION)
++LUA_INC= $(PREFIX)/include
+ 
+ # OS dependent
+ #LIB_OPTION= -shared #for Linux
+diff --git a/lib-src/luafilesystem-1.6.2/config b/lib-src/luafilesystem-1.6.2/config
+index 06c8610..5919818 100644
+--- a/lib-src/luafilesystem-1.6.2/config
++++ b/lib-src/luafilesystem-1.6.2/config
+@@ -1,13 +1,13 @@
+ # Installation directories
+ 
+ # Default installation prefix
+-PREFIX ?= /usr/local
++PREFIX ?= /opt/squeezeplay
+ 
+ # System's libraries directory (where binary libraries are installed)
+-LUA_LIBDIR= $(PREFIX)/lib/lua/5.1
++LUA_LIBDIR= /opt/jivelite/lib/lua/5.1:$(PREFIX)/lib/lua/5.1
+ 
+ # Lua includes directory
+-LUA_INC= $(PREFIX)/include/luajit-$(LUAJIT_VERSION)
++LUA_INC= $(PREFIX)/include
+ 
+ # OS dependent
+ #LIB_OPTION= -shared #for Linux
+@@ -16,7 +16,7 @@ LUA_INC= $(PREFIX)/include/luajit-$(LUAJIT_VERSION)
+ LIBNAME= $T.so.$V
+ 
+ # Compilation directives
+-WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
++WARN= -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -s -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic
+ INCS= -I$(LUA_INC)
+ CFLAGS= $(WARN) $(INCS)
+ CC= gcc
+diff --git a/lib-src/luamd5/Makefile b/lib-src/luamd5/Makefile
+index ff2eecb..7ca8c9d 100644
+--- a/lib-src/luamd5/Makefile
++++ b/lib-src/luamd5/Makefile
+@@ -2,7 +2,7 @@
+ 
+ # change these to reflect your Lua installation
+ #LUA= /tmp/lhf/lua-5.1.4
+-LUAINC= $(PREFIX)/include/luajit-$(LUAJIT_VERSION)
++LUAINC= $(PREFIX)/include
+ LUALIB= $(LUA)/lib
+ LUABIN= $(LUA)/bin
+ 
+diff --git a/lib-src/luasocket-2.0.2/config b/lib-src/luasocket-2.0.2/config
+index 1952a57..b5788c1 100644
+--- a/lib-src/luasocket-2.0.2/config
++++ b/lib-src/luasocket-2.0.2/config
+@@ -18,7 +18,7 @@ UNIX_SO=unix.$(EXT)
+ #LUAINC=-I/usr/local/include/lua50
+ #LUAINC=-I/usr/local/include/lua5.1
+ #LUAINC=-Ilua-5.1.1/src
+-LUAINC=-I$(PREFIX)/include/luajit-$(LUAJIT_VERSION)
++LUAINC=-I$(PREFIX)/include
+ 
+ #------
+ # Compat-5.1 directory
+diff --git a/lib-src/luazipfilter/Makefile b/lib-src/luazipfilter/Makefile
+index 70dcfd8..edcd216 100644
+--- a/lib-src/luazipfilter/Makefile
++++ b/lib-src/luazipfilter/Makefile
+@@ -1,5 +1,5 @@
+-CFLAGS  += -O2 -I$(PREFIX)/include/luajit-$(LUAJIT_VERSION) -fPIC
+-LDFLAGS = $(MYLDFLAGS) -lz
++CFLAGS  += -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -s -O2 -I$(PREFIX)/include -fPIC
++LDFLAGS = $(MYLDFLAGS) -lz -L/opt/jivelite/lib -L/opt/squeezeplay/lib
+ 
+ SOURCES = luazipfilter.c
+ LIB = zipfilter.so
+diff --git a/src/Makefile b/src/Makefile
+index 915518e..24ab687 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -1,8 +1,8 @@
+ LDFLAGS ?= -lrt
+ SOURCES ?= platform_linux.c
+ 
+-CFLAGS  += -I. -I$(PREFIX)/include/luajit-$(LUAJIT_VERSION) -I/usr/include/SDL -Wall -fPIC
+-LDFLAGS += -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1 -lm -lpthread
++CFLAGS  += -I. -I$(PREFIX)/include -I$(PREFIX)/include/SDL -Wall -fPIC -DOPTJIVELITE -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -s -O2
++LDFLAGS +=-lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -L/opt/jivelite/lib -L$(PREFIX)/lib -llua -lm -lpthread
+ EXE = ../bin/jivelite
+ 
+ DEPS    = jive.h common.h log.h version.h
+@@ -17,7 +17,7 @@ visualizer:
+ 	cd visualizer; make
+ 
+ $(EXE): $(OBJECTS)
+-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
++	$(CC) $(OBJECTS) -Wl,-rpath,$(PREFIX)/lib,-E $(LDFLAGS) -o $@
+ 
+ $(OBJECTS): $(DEPS)
+ 

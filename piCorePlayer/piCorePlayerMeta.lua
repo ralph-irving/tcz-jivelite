@@ -3,11 +3,10 @@ local oo                    = require("loop.simple")
 local AppletMeta            = require("jive.AppletMeta")
 local appletManager         = appletManager
 local jiveMain              = jiveMain
+local rpi                   = require("jive.utils.rpi_bl")
 
 module(...)
 oo.class(_M, AppletMeta)
-
-local lcdscript = "/home/tc/lcd-brightness.sh"
 
 function jiveVersion(self)
    return 1, 1
@@ -52,67 +51,28 @@ function configureApplet(self)
     	)
     )
 
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---    if self:getSettings()['pcp_rpi_display_brightness'] then
---        _write("/sys/class/backlight/rpi_backlight/brightness", self:getSettings()['pcp_rpi_display_brightness'])
---    end
+	if self:getSettings()['pcp_rpi_display_brightness'] then
+		local stored_brightness = self:getSettings()['pcp_rpi_display_brightness']
+		log:debug("Stored Brightness = " .. stored_brightness)
 
-    if self:getSettings()['pcp_rpi_display_brightness'] then
-    	local stored_brightness = self:getSettings()['pcp_rpi_display_brightness']
-    	log:debug("Stored Brightness = " .. stored_brightness)
-		if _file_exists("/sys/class/backlight/rpi_backlight/brightness") then
-    	    _write("/sys/class/backlight/rpi_backlight/brightness", stored_brightness)
-    	elseif _file_exists(lcdscript) then
--- set brightness range
-    		local cmd = lcdscript .. " R"
-    		log:debug(cmd)
-    		local retval = _read_capture(cmd)
-    		log:debug("Result of setting brightness range: " .. retval)
--- set brightness to stored value.  This is required not only to ensure correct brightness on reboot
--- but also to put GPIO 13 into PWM mode, so that 'pigs GDC g' will work
-			cmd = lcdscript .. " " .. stored_brightness
-			log:debug(cmd)
-			retval = _read_capture(cmd)
-    		log:debug("Result of setting brightness value: " .. retval)
-    	end
-    else
-    	log:debug("Brightness setting doesn't exist")
--- set brightness range
-    	cmd = lcdscript .. " R"
-    	log:debug(cmd)
-    	retval = _read_capture(cmd)
-    	log:debug("Result of setting brightness range: " .. retval)
--- set to full brightness.  This is required to put GPIO 13 into PWM mode, so that 'pigs GDC g' will work
-    	cmd = lcdscript .. " F"
-		log:debug(cmd)
-		retval = _read_capture(cmd)
+		if rpi.PiDisplay() == "pitouch" then
+			rpi.set_pCP_display_current_brightness(stored_brightness)
+		elseif rpi.PiDisplay == "lcd" then
+			-- set brightness range
+			local retval = rpi.run_lcd_script_command("R")
+			log:debug("Result of setting brightness range: " .. retval)
+			-- set brightness to stored value.  This is required not only to ensure correct brightness on reboot
+			-- but also to put GPIO 13 into PWM mode, so that 'pigs GDC g' will work
+			retval = rpi.run_lcd_script_command(stored_brightness)
+			log:debug("Result of setting brightness value: " .. retval)
+		end
+	else
+		log:debug("Brightness setting doesn't exist")
+		-- set brightness range
+		local retval = rpi.run_lcd_script_command("R")
+		log:debug("Result of setting brightness range: " .. retval)
+		-- set to full brightness.  This is required to put GPIO 13 into PWM mode, so that 'pigs GDC g' will work
+		retval = rpi.run_lcd_script_command("F")
 		log:debug("Result of setting brightness value: " .. retval)
-    end
-
+	end
 end
-
-function _write(file, val)
-    local fh, err = io.open(file, "w")
-    if err then
-        return
-    end
-    fh:write(val)
-    fh:close()
-end
-
--- allows output of shell scripts to be captured.
-function _read_capture(cmd)
-    local fh, err = io.popen(cmd, "r")
-    if err then
-        return nil
-    end
-    local fc = fh:read("*a")
-    fh:close()
-    return fc
-end
-
-function _file_exists(name)
-   local f=io.open(name,"r")
-   if f~=nil then io.close(f) return true else return false end
-end
-

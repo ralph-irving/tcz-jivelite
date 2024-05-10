@@ -10,6 +10,7 @@ v7  adds checkbox to enable/disable power on button when off (needs JiveLite hac
 v8  updated WOL menu with working add and remove menu options
 v9  WOL settings saved to /opt/bootlocal.sh
 v10 WOL settings saved to /usr/local/sbin/config.cfg and evaluated in /home/tc/www/cgi-bin/do_rebootstuff.sh
+v11 Updates for pi5, refactor code into rpi_bl.lua
    
 Lua/Jive/JiveLite bugs/problems encountered:
     - keyboard cursor key up moves volume slider down
@@ -27,7 +28,6 @@ local string            = require("string")
 local math              = require("math")
 local os                = require("os")
 local io                = require("io")
-local ir                = require("fab4_bsp")
 local oo                = require("loop.simple")
 local Event             = require("jive.ui.Event")
 local Icon              = require("jive.ui.Icon")
@@ -43,6 +43,7 @@ local Checkbox          = require("jive.ui.Checkbox")
 local Choice            = require("jive.ui.Choice")
 local Textinput         = require("jive.ui.Textinput")
 local Keyboard          = require("jive.ui.Keyboard")
+local rpi               = require("jive.utils.rpi_bl")
 
 local debug             = require("jive.utils.debug")
 
@@ -61,10 +62,6 @@ local pCP_WOL_config_file_location = "/usr/local/etc/pcp/pcp.cfg"
 local pCP_WOL_searchstring_WOL = "WOL="
 local pCP_WOL_searchstring_WOL_NIC = "WOL_NIC="
 local pCP_WOL_searchstring_WOL_LMSMACADDRESS = "WOL_LMSMACADDRESS="
-
-local pCP_display_brightness_current = "/sys/class/backlight/rpi_backlight/brightness"
-local pCP_display_brightness_max = "/sys/class/backlight/rpi_backlight/max_brightness"
-local pCP_display_backlight = "/sys/class/backlight/rpi_backlight/bl_power"
 
 local pCP_1_22_reboot_cmd = "/home/tc/.local/bin/pcp rb"
 local pCP_1_22_shutdown_cmd = "/home/tc/.local/bin/pcp sd"
@@ -87,8 +84,6 @@ local pCP_is_player_connected_to_LMS_cmd = "/usr/local/sbin/pcp connection_statu
 local pCP_rescan_LMS_media_library_min_version = 2.06
 local pCP_rescan_LMS_media_library_cmd = "/usr/local/sbin/pcp rescan"
 local pCP_rescan_LMS_media_library_in_progress_cmd = "/usr/local/sbin/pcp rescan_status"
-
-local lcdscript = "/home/tc/lcd-brightness.sh"
 
 function menu(self, menuItem)
     local window = Window("text_list", "piCorePlayer")
@@ -387,35 +382,13 @@ end
 
 function adjustDisplayBrightnessWhenOff(self, menuItem)
     if getpCPVersion() ~= nil then
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---[[
-        -- test if we can read from /sys/class/backlight/rpi_backlight/brightness
-        local currentBrightness = tonumber(_read(pCP_display_brightness_current))
---]]
-        local currentBrightness
-		if _file_exists(pCP_display_brightness_current) then
-			currentBrightness = tonumber(_read(pCP_display_brightness_current))
-        elseif _file_exists(lcdscript) then 
-        	currentBrightness = tonumber(_read_capture(lcdscript .. " C"))
-        end
-
+        local currentBrightness = tonumber(rpi.get_pCP_display_current_brightness())
         if currentBrightness == nil then
-        	currentBrightness = tonumber("50")
+            currentBrightness = tonumber("50")
         end
 
         if currentBrightness ~= nil then
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---[[
-            -- read max brightness value from /sys/class/backlight/rpi_backlight/max_brightness
-            local maxBrightness = tonumber(_read(pCP_display_brightness_max))
---]]
-        	local maxBrightness
-			if _file_exists(pCP_display_brightness_max) then
-				maxBrightness = tonumber(_read(pCP_display_brightness_max))
-        	elseif _file_exists(lcdscript) then 
-        		maxBrightness = tonumber(_read_capture(lcdscript .. " M"))
-        	end
-        	
+            local maxBrightness = tonumber(rpi.get_pCP_display_max_brightness())
             local brightnessWhenOff = currentBrightness
             if self:getSettings()["pcp_rpi_display_brightness_when_off"] then
                 brightnessWhenOff = self:getSettings()["pcp_rpi_display_brightness_when_off"]
@@ -442,21 +415,14 @@ function adjustDisplayBrightnessWhenOff(self, menuItem)
             popup:addActionListener("go_home", self, cancelBrightnessAction)
             popup:addActionListener("scanner_rew", self, cancelBrightnessAction)
             
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---[[        
-		    local labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_WHEN_OFF"))
-
-            local label = Label("text", labelText .. " " .. tostring(brightnessWhenOff))
-            local help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF"))
---]]
-			local help
-			local labelText
-			if _file_exists(pCP_display_brightness_current) then
-            	help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF"))
-            	labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_WHENOFF"))
-            elseif _file_exists(lcdscript) then
-            	help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC"))
-            	labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC"))
+            local help
+            local labelText
+            if rpi.PiDisplay() == "pitouch" then
+                help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF"))
+                labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_WHENOFF"))
+            elseif rpi.PiDisplay() == "lcd" then
+                help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC"))
+                labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_WHEN_OFF_GENERIC"))
             end
             local label = Label("text", labelText .. " " .. tostring(brightnessWhenOff))
 
@@ -490,20 +456,20 @@ function adjustDisplayBrightnessWhenOff(self, menuItem)
             popup:addActionListener("volume_down", self, brightnessDownAction)
 
             local brightnessPercentAction = function(self, event)
-                    local eventName = event:getAction()
-                    if eventName == "play_preset_0" then
-                        slider:setValue(maxBrightness)
-                        label:setValue(labelText .. " " .. tostring(slider:getValue()))
-                        brightnessWhenOff = slider:getValue()
-                        return EVENT_CONSUME
-                    else
-                        local presetNumber = tonumber(string.sub(eventName, -1))
-                        slider:setValue(math.floor((maxBrightness / 100) * (10 * presetNumber)))
-                        label:setValue(labelText .. " " .. tostring(slider:getValue()))
-                        brightnessWhenOff = slider:getValue()
-                        return EVENT_CONSUME
-                    end
-                    return EVENT_UNUSED
+                local eventName = event:getAction()
+                if eventName == "play_preset_0" then
+                    slider:setValue(maxBrightness)
+                    label:setValue(labelText .. " " .. tostring(slider:getValue()))
+                    brightnessWhenOff = slider:getValue()
+                    return EVENT_CONSUME
+                else
+                    local presetNumber = tonumber(string.sub(eventName, -1))
+                    slider:setValue(math.floor((maxBrightness / 100) * (10 * presetNumber)))
+                    label:setValue(labelText .. " " .. tostring(slider:getValue()))
+                    brightnessWhenOff = slider:getValue()
+                    return EVENT_CONSUME
+                end
+                return EVENT_UNUSED
             end
 
             popup:addActionListener("play_preset_1", self, brightnessPercentAction)
@@ -546,26 +512,9 @@ end
 
 function adjustDisplayBrightness(self, menuItem)
     if getpCPVersion() ~= nil then
-        -- test if we can read from /sys/class/backlight/rpi_backlight/brightness
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---        local currentBrightness = tonumber(_read(pCP_display_brightness_current))
-        local currentBrightness
-		if _file_exists(pCP_display_brightness_current) then
-			currentBrightness = tonumber(_read(pCP_display_brightness_current))
-        elseif _file_exists(lcdscript) then 
-        	currentBrightness = tonumber(_read_capture(lcdscript .. " C"))
-        end
-            
+        local currentBrightness = tonumber(rpi.get_pCP_display_current_brightness())
         if currentBrightness ~= nil then
-            -- read max brightness value from /sys/class/backlight/rpi_backlight/max_brightness
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---            local maxBrightness = tonumber(_read(pCP_display_brightness_max))
-        	local maxBrightness
-			if _file_exists(pCP_display_brightness_max) then
-				maxBrightness = tonumber(_read(pCP_display_brightness_max))
-        	elseif _file_exists(lcdscript) then 
-        		maxBrightness = tonumber(_read_capture(lcdscript .. " M"))
-        	end
+            local maxBrightness = tonumber(rpi.get_pCP_display_max_brightness())
  
             local popup = Popup("black_popup")
 
@@ -577,79 +526,51 @@ function adjustDisplayBrightness(self, menuItem)
             popup:ignoreAllInputExcept({"back", "go_home", "scanner_rew", "volume_up", "volume_down", "play_preset_1", "play_preset_2", "play_preset_3", "play_preset_4", "play_preset_5", "play_preset_6", "play_preset_7", "play_preset_8", "play_preset_9", "play_preset_0"})
             
             local cancelBrightnessAction = function()
-                    -- read current brightness value from /sys/class/backlight/rpi_backlight/brightness and save settings to settings\piCorePlayer.lua
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                    self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read(pCP_display_brightness_current))
-                    if _file_exists(pCP_display_brightness_current) then
-                    	self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read(pCP_display_brightness_current))
-                    elseif _file_exists(lcdscript) then 
-						self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read_capture(lcdscript .. " C"))
-					end
-                    self:storeSettings()
-                    popup:hide()
-                    return EVENT_CONSUME
+                -- read current brightness value from and save settings to settings\piCorePlayer.lua
+                self:getSettings()["pcp_rpi_display_brightness"] = currentBrightness
+                self:storeSettings()
+                popup:hide()
+                return EVENT_CONSUME
             end
 
             popup:addActionListener("back", self, cancelBrightnessAction)
             popup:addActionListener("go_home", self, cancelBrightnessAction)
             popup:addActionListener("scanner_rew", self, cancelBrightnessAction)
             
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---            local labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS"))
---            local label = Label("text", labelText .. " " .. tostring(currentBrightness))
---            local help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS"))
-
-			local help
-			local labelText
-			if _file_exists(pCP_display_brightness_current) then
-            	help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS"))
-            	labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS"))
-            elseif _file_exists(lcdscript) then
-            	help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_GENERIC"))
-            	labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_GENERIC"))
+            --use of a generic lcdscript script file if official 7" display is not present
+            local help
+            local labelText
+            if rpi.PiDisplay() == "pitouch" then
+                help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS"))
+                labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS"))
+            elseif rpi.PiDisplay() == "lcd" then
+                help = Textarea("help_text", self:string("HELP_TEXT_ADJUST_BRIGHTNESS_GENERIC"))
+                labelText = tostring(self:string("LABEL_ADJUST_BRIGHTNESS_GENERIC"))
             end
             local label = Label("text", labelText .. " " .. tostring(currentBrightness))
 
             local slider = Slider("brightness_slider", 0, maxBrightness, currentBrightness,
                 function(slider, value)
-                    label:setValue(labelText .. " " .. tostring(value))
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                    _write(pCP_display_brightness_current, tostring(value))
-					if _file_exists(pCP_display_brightness_current) then
-						_write(pCP_display_brightness_current, tostring(value))
-					elseif _file_exists(lcdscript) then
-						os.execute(lcdscript .. " " .. tostring(value))
-					end
-                end)
+                label:setValue(labelText .. " " .. tostring(value))
+                rpi.set_pCP_display_current_brightness(tostring(value))
+            end)
 
             local brightnessUpAction = function()
-                    if slider:getValue() < maxBrightness then
-                        slider:setValue(slider:getValue() + 1)
-                        label:setValue(labelText .. " " .. tostring(slider:getValue()))
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                         _write(pCP_display_brightness_current, slider:getValue())
-						if _file_exists(pCP_display_brightness_current) then
-							_write(pCP_display_brightness_current, tostring(slider:getValue()))
-						elseif _file_exists(lcdscript) then
-							os.execute(lcdscript .. " " .. tostring(slider:getValue()))
-						end
-                        return EVENT_CONSUME
-                    end
-                    return EVENT_UNUSED
+                if slider:getValue() < maxBrightness then
+                    slider:setValue(slider:getValue() + 1)
+                    label:setValue(labelText .. " " .. tostring(slider:getValue()))
+                    rpi.set_pCP_display_current_brightness(tostring(slider:getValue()))
+                    return EVENT_CONSUME
+                end
+                return EVENT_UNUSED
             end
 
             local brightnessDownAction = function()
                     if slider:getValue() > 0 then
                         slider:setValue(slider:getValue() - 1)
                         label:setValue(labelText .. " " .. tostring(slider:getValue()))
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                        _write(pCP_display_brightness_current, slider:getValue())
-						if _file_exists(pCP_display_brightness_current) then
-							_write(pCP_display_brightness_current, tostring(slider:getValue()))
-						elseif _file_exists(lcdscript) then
-							os.execute(lcdscript .. " " .. tostring(slider:getValue()))
-						end
-                         return EVENT_CONSUME
+                        rpi.set_pCP_display_current_brightness(tostring(slider:getValue()))
+                        return EVENT_CONSUME
                     end
                     return EVENT_UNUSED
             end
@@ -658,32 +579,20 @@ function adjustDisplayBrightness(self, menuItem)
             popup:addActionListener("volume_down", self, brightnessDownAction)
 
             local brightnessPercentAction = function(self, event)
-                    local eventName = event:getAction()
-                    if eventName == "play_preset_0" then
-                        slider:setValue(maxBrightness)
-                        label:setValue(labelText .. " " .. tostring(slider:getValue()))
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                        _write(pCP_display_brightness_current, slider:getValue())
-						if _file_exists(pCP_display_brightness_current) then
-							_write(pCP_display_brightness_current, tostring(slider:getValue()))
-						elseif _file_exists(lcdscript) then
-							os.execute(lcdscript .. " " .. tostring(slider:getValue()))
-						end
-                        return EVENT_CONSUME
-                    else
-                        local presetNumber = tonumber(string.sub(eventName, -1))
-                        slider:setValue(math.floor((maxBrightness / 100) * (10 * presetNumber)))
-                        label:setValue(labelText .. " " .. tostring(slider:getValue()))
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                        _write(pCP_display_brightness_current, slider:getValue())
-						if _file_exists(pCP_display_brightness_current) then
-							_write(pCP_display_brightness_current, tostring(slider:getValue()))
-						elseif _file_exists(lcdscript) then
-							os.execute(lcdscript .. " " .. tostring(slider:getValue()))
-						end
-                        return EVENT_CONSUME
-                    end
-                    return EVENT_UNUSED
+                local eventName = event:getAction()
+                if eventName == "play_preset_0" then
+                    slider:setValue(maxBrightness)
+                    label:setValue(labelText .. " " .. tostring(slider:getValue()))
+                    rpi.set_pCP_display_current_brightness(tostring(slider:getValue()))
+                    return EVENT_CONSUME
+                else
+                    local presetNumber = tonumber(string.sub(eventName, -1))
+                    slider:setValue(math.floor((maxBrightness / 100) * (10 * presetNumber)))
+                    label:setValue(labelText .. " " .. tostring(slider:getValue()))
+                    rpi.set_pCP_display_current_brightness(tostring(slider:getValue()))
+                    return EVENT_CONSUME
+                end
+                return EVENT_UNUSED
             end
 
             popup:addActionListener("play_preset_1", self, brightnessPercentAction)
@@ -700,13 +609,7 @@ function adjustDisplayBrightness(self, menuItem)
             popup:addListener(EVENT_MOUSE_PRESS,
                 function(event)
                     -- read current brightness value from /sys/class/backlight/rpi_backlight/brightness and save settings to settings\piCorePlayer.lua
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---                    self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read(pCP_display_brightness_current))
-                    if _file_exists(pCP_display_brightness_current) then
-                    	self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read(pCP_display_brightness_current))
-                    elseif _file_exists(lcdscript) then 
-						self:getSettings()["pcp_rpi_display_brightness"] = tonumber(_read_capture(lcdscript .. " C"))
-					end
+                    self:getSettings()["pcp_rpi_display_brightness"] = tonumber(rpi.get_pCP_display_current_brightness())
                     self:storeSettings()
                     popup:hide()
                     return EVENT_CONSUME
@@ -715,10 +618,10 @@ function adjustDisplayBrightness(self, menuItem)
             popup:addWidget(label)
             popup:addWidget(help)
             popup:addWidget(Group("slider_group", {
-                         min = Icon("brightness_group.down"),
-                         slider = slider,
-                         max = Icon("brightness_group.up")
-                     }))
+                min = Icon("brightness_group.down"),
+                slider = slider,
+                max = Icon("brightness_group.up")
+                }))
 
             self:tieAndShowWindow(popup)
             return popup
@@ -751,31 +654,31 @@ function rebootPi(self, menuItem)
 
         local state = 4
         popup:addTimer(1000, function()
-               if state == 4 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
-               elseif state == 3 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
-               elseif state == 2 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
-               elseif state == 1 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
-               elseif state == 0 then
-                    icon:setStyle("")
-                    label:setValue("")
-                    text:setValue(self:string("LABEL_REBOOTING"))
-               elseif state == -1 then
-                    if pcpVersion >= 3.20 then
-                        os.execute(pCP_3_2_reboot_cmd)
-                    elseif pcpVersion >= 2.00 then
-                        os.execute(pCP_2_0_reboot_cmd)
-                    elseif pcpVersion >= 1.22 then
-                        os.execute(pCP_1_22_reboot_cmd)
-                    else
-                        os.execute(pCP_default_reboot_cmd)
-                    end
-               end
-               state = state - 1
-           end)
+            if state == 4 then
+                label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
+            elseif state == 3 then
+                label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
+            elseif state == 2 then
+                label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
+            elseif state == 1 then
+                label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
+            elseif state == 0 then
+                icon:setStyle("")
+                label:setValue("")
+                text:setValue(self:string("LABEL_REBOOTING"))
+            elseif state == -1 then
+                if pcpVersion >= 3.20 then
+                    os.execute(pCP_3_2_reboot_cmd)
+                elseif pcpVersion >= 2.00 then
+                    os.execute(pCP_2_0_reboot_cmd)
+                elseif pcpVersion >= 1.22 then
+                    os.execute(pCP_1_22_reboot_cmd)
+                else
+                    os.execute(pCP_default_reboot_cmd)
+                end
+            end
+            state = state - 1
+        end)
 
         self:tieAndShowWindow(popup)
         return popup
@@ -805,40 +708,40 @@ function shutdownPi(self, menuItem)
 
         local state = 4
         popup:addTimer(1000, function()
-               if state == 4 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
-               elseif state == 3 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
-               elseif state == 2 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
-               elseif state == 1 then
-                   label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
-               elseif state == 0 then
-                    icon:setStyle("")
-                    label:setValue("")
-                    text:setValue(self:string("LABEL_SHUTTING_DOWN"))
-               elseif state == -1 then
-                    -- should we disconnect player from server before shutdown????
-                    appletManager:callService("disconnectPlayer")
-                    if pcpVersion >= 3.20 then
-			_write(pCP_display_backlight, "1")
-			os.execute(pCP_3_2_shutdown_cmd)
-                    elseif pcpVersion >= 2.00 then
-                        -- turn off display!
-                        -- code from Ralphy's DisplayOffApplet.lua
-                        -- no need to remember the current state
-                        -- as the Pi is about to be powered off
-                        _write(pCP_display_backlight, "1")
-                        os.execute(pCP_2_0_shutdown_cmd)
-                    elseif pcpVersion >= 1.22 then
-                        _write(pCP_display_backlight, "1")
-                        os.execute(pCP_1_22_shutdown_cmd)
-                    else
-                        os.execute(pCP_default_shutdown_cmd)
-                    end
-               end
-               state = state - 1
-           end)
+            if state == 4 then
+                label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
+            elseif state == 3 then
+                label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
+            elseif state == 2 then
+                label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
+            elseif state == 1 then
+                label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
+            elseif state == 0 then
+                icon:setStyle("")
+                label:setValue("")
+                text:setValue(self:string("LABEL_SHUTTING_DOWN"))
+            elseif state == -1 then
+                -- should we disconnect player from server before shutdown????
+                appletManager:callService("disconnectPlayer")
+                if pcpVersion >= 3.20 then
+                    rpi.set_backlight_power("1")
+                    os.execute(pCP_3_2_shutdown_cmd)
+                elseif pcpVersion >= 2.00 then
+                    -- turn off display!
+                    -- code from Ralphy's DisplayOffApplet.lua
+                    -- no need to remember the current state
+                    -- as the Pi is about to be powered off
+                    rpi.set_backlight_power("1")
+                    os.execute(pCP_2_0_shutdown_cmd)
+                elseif pcpVersion >= 1.22 then
+                    rpi.set_backlight_power("1")
+                    os.execute(pCP_1_22_shutdown_cmd)
+                else
+                    os.execute(pCP_default_shutdown_cmd)
+                end
+            end
+            state = state - 1
+        end)
 
         self:tieAndShowWindow(popup)
         return popup
@@ -871,25 +774,25 @@ function rescanLMSMediaLibrary(self, menuItem)
 
                     local state = 4
                     popup:addTimer(1000, function()
-                           if state == 4 then
-                               label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
-                           elseif state == 3 then
-                               label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
-                           elseif state == 2 then
-                               label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
-                           elseif state == 1 then
-                               label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
-                           elseif state == 0 then
-                                icon:setStyle("")
-                                label:setValue("")
-                                text:setValue(self:string("LABEL_RESCAN_LMS_MEDIA_LIBRARY_INITIATED"))
-                           elseif state == -1 then
-                                os.execute(pCP_rescan_LMS_media_library_cmd)
-                           elseif state == -2 then
-                                popup:hide()
-                           end
-                           state = state - 1
-                       end)
+                        if state == 4 then
+                            label:setValue(self:string("LABEL_COUNTDOWN_4_SECONDS"))
+                        elseif state == 3 then
+                            label:setValue(self:string("LABEL_COUNTDOWN_3_SECONDS"))
+                        elseif state == 2 then
+                            label:setValue(self:string("LABEL_COUNTDOWN_2_SECONDS"))
+                        elseif state == 1 then
+                            label:setValue(self:string("LABEL_COUNTDOWN_1_SECOND"))
+                        elseif state == 0 then
+                            icon:setStyle("")
+                            label:setValue("")
+                            text:setValue(self:string("LABEL_RESCAN_LMS_MEDIA_LIBRARY_INITIATED"))
+                        elseif state == -1 then
+                            os.execute(pCP_rescan_LMS_media_library_cmd)
+                        elseif state == -2 then
+                            popup:hide()
+                        end
+                        state = state - 1
+                    end)
 
                     self:tieAndShowWindow(popup)
                     return popup
@@ -959,7 +862,7 @@ function showPopupMessage(self, message, duration)
     popup:setTransparent(true)
 
     --"text" doesn't support \n\n constructions but centers the text vertically
-	local text = Label("text", message)
+    local text = Label("text", message)
     --"help text" does support \n\n constructions but doesn's center the text vertically
     -- local text = Textarea("help_text", message)
 
@@ -1066,9 +969,3 @@ function table_find(val, tbl)
     end
     return nil
 end
-
-function _file_exists(name)
-   local f=io.open(name,"r")
-   if f~=nil then io.close(f) return true else return false end
-end
-

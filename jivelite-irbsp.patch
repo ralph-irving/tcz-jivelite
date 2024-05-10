@@ -1,0 +1,21 @@
+--- share/jive/applets/DesktopJive/DesktopJiveMeta.lua
++++ share/jive/applets/DesktopJive/DesktopJiveMeta.lua
+@@ -5,6 +5,7 @@
+ local string        = require("string")
+ local table         = require("jive.utils.table")
+ local os            = require("os")
++local ir            = require("ir_bsp")
+ 
+ local AppletMeta    = require("jive.AppletMeta")
+ local Framework     = require("jive.ui.Framework")
+@@ -92,8 +93,8 @@
+ 	})
+ 
+ 	System:setCapabilities({
+-	--	["touch"] = 1,
+-	--	["ir"] = 1,
++		["touch"] = 1,
++		["ir"] = 1,
+ 		["powerKey"] = 1,
+ 		["muteKey"] = 1,
+ 		["alarmKey"] = 1,

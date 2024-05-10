@@ -4,8 +4,6 @@ Display Off Time Peek Applet based on BlankScreen screensaver
 
 --]]
 
-local tonumber         = tonumber
-
 local io               = require("io")
 local os               = require("os")
 local oo               = require("loop.simple")
@@ -18,6 +16,7 @@ local Label            = require("jive.ui.Label")
 local datetime         = require("jive.utils.datetime")
 local Applet           = require("jive.Applet")
 local Timer            = require("jive.ui.Timer")
+local rpi              = require("jive.utils.rpi_bl")
 
 local appletManager    = appletManager
 
@@ -100,23 +99,19 @@ end
 
 local on = "0"
 local off = "1"
-local lcdscript = "/home/tc/lcd-brightness.sh"
 
 -- enable backlight on on a timer because the first revision of the official Pi display
 -- isn't fast enough to handle backlight on directly/has a hardware bug/something else?
 local timerOn = Timer(600,
     function()
         Framework:setUpdateScreen(true)
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---        if tonumber(_read("/sys/class/backlight/rpi_backlight/bl_power")) == tonumber(off) then
-        if _file_exists("/sys/class/backlight/rpi_backlight/bl_power") then
-        	if tonumber(_read("/sys/class/backlight/rpi_backlight/bl_power")) == tonumber(off) then
-           		_write("/sys/class/backlight/rpi_backlight/bl_power", on)
-        	end
-        elseif _file_exists(lcdscript) then
--- turning display on: restore previous brightness
-			log:debug("brightness to restore: " .. current_brightness)
-			os.execute(lcdscript .. " " .. current_brightness)
+
+        -- turning display on: restore previous brightness
+        if rpi.PiDisplay() == "pitouch" then
+            rpi.set_backlight_power(on)
+        elseif rpi.PiDisplay() == "lcd" then
+            log:debug("brightness to restore: " .. current_brightness)
+            rpi.set_lcd_current_brightness( current_brightness )
         end
     end,
     true)
@@ -128,62 +123,22 @@ local timerOff = Timer(1000,
         Framework:setUpdateScreen(false)
     end,
     true)
-    
+
 function _screen(self, state)
     if state == "on" then
         timerOff:stop()
         timerOn:start()
     elseif state == "off" then
         timerOn:stop()
---CJH: Modification to allow use of a generic lcdscript script file if official 7" display is not present
---        if tonumber(_read("/sys/class/backlight/rpi_backlight/bl_power")) == tonumber(on) then
-        if _file_exists("/sys/class/backlight/rpi_backlight/bl_power") then
-        	if tonumber(_read("/sys/class/backlight/rpi_backlight/bl_power")) == tonumber(on) then
-            	_write("/sys/class/backlight/rpi_backlight/bl_power", off)
-            end
-        elseif _file_exists(lcdscript) then
--- turning display off: store current brightness so that it can be restored when the screensaver is deactivated
-			current_brightness = _read_capture(lcdscript .. " C")
-			log:debug("Brightness = " .. current_brightness)
-			os.execute(lcdscript .. " 0") 
-		end
+
+        -- turning display off: store current brightness so that it can be restored when the screensaver is deactivated
+        if rpi.PiDisplay() == "pitouch" then
+            rpi.set_backlight_power(off)
+        elseif rpi.PiDisplay() == "lcd" then
+            current_brightness = rpi.get_lcd_current_brightness()
+            log:debug("Brightness = " .. current_brightness)
+            rpi.set_lcd_current_brightness( "0")
+        end
         timerOff:start()
     end
 end
-
-function _read(file)
-    local fh, err = io.open(file, "r")
-    if err then
-        return nil
-    end
-    local fc = fh:read("*all")
-    fh:close()
-    return fc
-end
-
-function _write(file, val)
-    local fh, err = io.open(file, "w")
-    if err then
-        return
-    end
-    fh:write(val)
-    fh:close()
-end
-
-function _file_exists(name)
-   local f=io.open(name,"r")
-   if f~=nil then io.close(f) return true else return false end
-end
-
--- allows output of shell scripts to be captured.
-function _read_capture(cmd)
-    local fh, err = io.popen(cmd, "r")
-    if err then
-        return nil
-    end
-    local fc = fh:read("*a")
-    fh:close()
-    return fc
-end
-
-

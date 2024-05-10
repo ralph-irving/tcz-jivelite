@@ -1,9 +1,20 @@
 #!/bin/sh
 
-export LOG=/var/log/jivelite.log
+export LOG=/var/log/pcp_jivelite.log
 
-if [ -f /usr/local/sbin/config.cfg ]; then
-    source /usr/local/sbin/config.cfg
+if [ -f /usr/local/etc/pcp/pcp.cfg ]; then
+    source /usr/local/etc/pcp/pcp.cfg
+    if [ ! -z ${SCREENROTATE} ]; then
+        MODEL=$(busybox awk '/^Model/ { print $5 }' /proc/cpuinfo)
+        if [ "${MODEL}" == "5" ]; then
+            # Rotation CCW=270, UD=180, CW=90 degrees
+            if [ "${SCREENROTATE}" == "180" ]; then
+                export SDL_VIDEO_FBCON_ROTATION=UD
+                export TSLIB_CALIBFILE=/usr/local/etc/pointercal-r2
+                echo "Pi5 detected sdl screen rotation enabled." >> $LOG
+            fi
+        fi
+    fi	
 fi
 
 if [ ! -z ${JL_FRAME_BUFFER} ]; then
