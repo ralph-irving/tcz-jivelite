@@ -166,7 +166,7 @@ cd $OUTPUT/../
 echo -e "Title:\t\t$LUATCZ" > $LUATCZINFO
 echo -e "Description:\tLua a powerful, efficient, lightweight, embeddable scripting language." >> $LUATCZINFO
 echo -e "Version:\t5.1.5" >> $LUATCZINFO
-echo -e "Commit:\t\t$(cd $SRC/lua-5.1.5; svn info | grep Revision: | awk '{printf "%d", $2}')" >> $LUATCZINFO
+echo -e "Commit:\t\t$(cd $SRC; git show | grep commit | awk '{print $2}')" >> $LUATCZINFO
 echo -e "Authors:\thttp://www.lua.org/authors.html" >> $LUATCZINFO
 echo -e "Original-site:\thttp://www.lua.org/" >> $LUATCZINFO
 echo -e "Copying-policy:\tMIT http://www.lua.org/license.html" >> $LUATCZINFO
@@ -198,3 +198,5 @@ sed -i -e '/^Size:*/d' pcp-jivelite_qvgaskins.tcz.info
 cp -p $TCZINFO pcp-jivelite_wqvgaskins.tcz.info
 sed -i "s#pcp-$JIVELITE.tcz#pcp-jivelite_wqvgaskins.tcz#" pcp-jivelite_wqvgaskins.tcz.info
 sed -i -e '/^Size:*/d' pcp-jivelite_wqvgaskins.tcz.info
+
+./create-vumeters-alex-tcz.sh
