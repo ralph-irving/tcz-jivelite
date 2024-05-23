@@ -14,6 +14,14 @@ image[6]=vu_analog_25seq_speaker.png
 tcz[6]=VU_Meter_Alex_Speaker.tcz
 image[7]=vu_analog_25seq_vfd.png
 tcz[7]=VU_Meter_Alex_VFD.tcz
+image[8]=vu_analog_25seq_seg4.png
+tcz[8]=VU_Meter_Alex_Segments4.tcz
+image[9]=vu_analog_25seq_led.png
+tcz[9]=VU_Meter_Alex_LED.tcz
+image[10]=vu_analog_25seq_speaker2.png
+tcz[10]=VU_Meter_Alex_Speaker2.tcz
+image[11]=vu_analog_25seq_speaker3.png
+tcz[11]=VU_Meter_Alex_Speaker3.tcz
 
 i=1
 while true; do
