@@ -28,6 +28,9 @@ function set()
     elseif _file_exists("/sys/class/backlight/6-0045/brightness") then
         pidisplay = "pitouch"
         brightness = "/sys/class/backlight/6-0045/brightness"
+    elseif _file_exists("/sys/class/backlight/10-0045/brightness") then
+        pidisplay = "pitouch"
+        brightness = "/sys/class/backlight/10-0045/brightness"
     elseif _file_exists (brightness) then
         pidisplay = "pitouch"
     end
@@ -36,12 +39,16 @@ function set()
         max_brightness = "/sys/class/backlight/4-0045/max_brightness"
     elseif _file_exists("/sys/class/backlight/6-0045/max_brightness") then
         max_brightness = "/sys/class/backlight/6-0045/max_brightness"
+    elseif _file_exists("/sys/class/backlight/10-0045/max_brightness") then
+        max_brightness = "/sys/class/backlight/10-0045/max_brightness"
     end
 
     if _file_exists("/sys/class/backlight/4-0045/bl_power") then
         bl_power = "/sys/class/backlight/4-0045/bl_power"
     elseif _file_exists("/sys/class/backlight/6-0045/bl_power") then
         bl_power = "/sys/class/backlight/6-0045/bl_power"
+    elseif _file_exists("/sys/class/backlight/10-0045/bl_power") then
+        bl_power = "/sys/class/backlight/10-0045/bl_power"
     end
 
     if pidisplay == nil then
