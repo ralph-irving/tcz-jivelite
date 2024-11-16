@@ -7,9 +7,10 @@ local tonumber = tonumber
 module(...)
 
 if init == nil then
-    brightness = "/sys/class/backlight/rpi_backlight/brightness"
-    max_brightness = "/sys/class/backlight/rpi_backlight/max_brightness"
-    bl_power = "/sys/class/backlight/rpi_backlight/bl_power"
+    backlightpath = "/"
+    brightness = "/brightness"
+    max_brightness = "/max_brightness"
+    bl_power = "/bl_power"
 
     pCP_lcdscript = "/home/tc/lcd-brightness.sh"
 end
@@ -21,34 +22,19 @@ function set()
         log:info("Init:" .. init)
     end
   
-    --Rpi display presents differently on pi0-4 vs pi5 (2 display connectors)
-    if _file_exists("/sys/class/backlight/4-0045/brightness") then
-        pidisplay = "pitouch"
-        brightness = "/sys/class/backlight/4-0045/brightness"
-    elseif _file_exists("/sys/class/backlight/6-0045/brightness") then
-        pidisplay = "pitouch"
-        brightness = "/sys/class/backlight/6-0045/brightness"
-    elseif _file_exists("/sys/class/backlight/10-0045/brightness") then
-        pidisplay = "pitouch"
-        brightness = "/sys/class/backlight/10-0045/brightness"
-    elseif _file_exists (brightness) then
-        pidisplay = "pitouch"
-    end
+    -- Find Raspberry display driver backlight links
+    local ret = _read_capture("readlink /sys/class/backlight/*")	   
+    local tmp = "/sys/class/backlight/" .. ret
+    local backlightpath = tmp:gsub("[\n\r]", "")
+    brightness = backlightpath .. "/brightness"
+    max_brightness = backlightpath .. "/max_brightness"
+    bl_power = backlightpath .. "/bl_power"
+    log:debug("brightness: " .. brightness)
+    log:debug("maxbrightness: " .. max_brightness)
+    log:debug("power: " .. bl_power)
 
-    if _file_exists("/sys/class/backlight/4-0045/max_brightness") then
-        max_brightness = "/sys/class/backlight/4-0045/max_brightness"
-    elseif _file_exists("/sys/class/backlight/6-0045/max_brightness") then
-        max_brightness = "/sys/class/backlight/6-0045/max_brightness"
-    elseif _file_exists("/sys/class/backlight/10-0045/max_brightness") then
-        max_brightness = "/sys/class/backlight/10-0045/max_brightness"
-    end
-
-    if _file_exists("/sys/class/backlight/4-0045/bl_power") then
-        bl_power = "/sys/class/backlight/4-0045/bl_power"
-    elseif _file_exists("/sys/class/backlight/6-0045/bl_power") then
-        bl_power = "/sys/class/backlight/6-0045/bl_power"
-    elseif _file_exists("/sys/class/backlight/10-0045/bl_power") then
-        bl_power = "/sys/class/backlight/10-0045/bl_power"
+    if _file_exists(brightness) then
+        pidisplay = "pitouch"
     end
 
     if pidisplay == nil then
