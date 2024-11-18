@@ -103,11 +103,11 @@ tslib: libts-1.0/Makefile
 	cd libts-1.0; make && make install
 
 # sdl
-SDL-1.2.16/Makefile:
-	cd SDL-1.2.16; ./configure --prefix=${PREFIX} ${ENABLE_SHAREDLIBS} --enable-audio=no --enable-video --enable-events --enable-joystick=no --enable-cdrom=no --enable-threads --enable-timers --enable-file --enable-loadso --enable-esd=no --enable-arts=no --enable-esd-shared=no --enable-clock_gettime --enable-video-x11=no --enable-video-opengl=no --enable-video-dummy=no --enable-video-directfb=no --enable-pulseaudio=no --enable-input-tslib=yes
+SDL-1.2.15/Makefile:
+	cd SDL-1.2.15; ./configure --prefix=${PREFIX} ${ENABLE_SHAREDLIBS} --enable-audio=no --enable-video --enable-events --enable-joystick=no --enable-cdrom=no --enable-threads --enable-timers --enable-file --enable-loadso --enable-esd=no --enable-arts=no --enable-esd-shared=no --enable-clock_gettime --enable-video-x11=no --enable-video-opengl=no --enable-video-dummy=no --enable-video-directfb=no --enable-pulseaudio=no --enable-input-tslib=yes
 
-sdl: SDL-1.2.16/Makefile
-	cd SDL-1.2.16; make && make install
+sdl: SDL-1.2.15/Makefile
+	cd SDL-1.2.15; make && make install
 
 # sdl_image (requires jpeg tiff png)
 SDL_image-1.2.5/Makefile:
@@ -310,7 +310,7 @@ clean:
 	-cd libpng-1.2.59; make distclean
 	-cd jpeg-9d; make distclean
 	-cd libts-1.0; make distclean; rm -f Makefile
-	-cd SDL-1.2.16; make distclean; rm -f include/SDL_config.h sdl.pc;
+	-cd SDL-1.2.15; make distclean; rm -f include/SDL_config.h sdl.pc;
 	-cd SDL_image-1.2.5; make distclean
 	-cd SDL_ttf-2.0.11; make distclean
 	-cd SDL_gfx-2.0.15; make distclean
