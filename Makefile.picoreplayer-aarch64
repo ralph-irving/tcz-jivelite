@@ -1,5 +1,5 @@
 ################################################################################
-# Squeezeplay makefile for picoreplayer raspberry pi armhf
+# Squeezeplay makefile for picoreplayer raspberry pi aarch64
 # Copyright 2007 Logitech
 # Copyright 2021 Ralph Irving
 ################################################################################
@@ -25,18 +25,19 @@ export BUILD_TOP=$(BASE_DIR)build/linux
 DESTDIR=${BUILD_TOP}
 export PREFIX=${DESTDIR}
 
-export CFLAGS=-I${PREFIX}/include -I${PREFIX}/include/SDL -I${PREFIX}/include/freetype2 -s -pipe -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
-export CXXFLAGS=-I${PREFIX}/include -I${PREFIX}/include/SDL -I${PREFIX}/include/freetype2 -s -pipe -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -fno-exceptions
+export CFLAGS=-I${PREFIX}/include -I${PREFIX}/include/SDL -I${PREFIX}/include/freetype2 -pipe -s -O2 -march=armv8-a+crc -mtune=cortex-a72
+export CPPFLAGS=-I${PREFIX}/include -I${PREFIX}/include/SDL -I${PREFIX}/include/freetype2
+export CXXFLAGS=-I${PREFIX}/include -I${PREFIX}/include/SDL -I${PREFIX}/include/freetype2 -pipe -s -O2 -march=armv8-a+crc -mtune=cortex-a72 -fno-exceptions -fno-rtti
 export LDFLAGS=-s -L${PREFIX}/lib
 
 export TOOLPATH = $(shell dirname `which gcc`)
 
 export SDL_CONFIG = ${BUILD_TOP}/bin/sdl-config
 
-BUILD=armv6l-unknown-linux-gnu
-ENABLE_SHAREDLIBS=--build=${BUILD} --enable-shared=yes --enable-static=no
+# BUILD=aarch64-unknown-linux-gnu
+# ENABLE_SHAREDLIBS=--build=${BUILD} --enable-shared=yes --enable-static=no
+ENABLE_SHAREDLIBS=--enable-shared=yes --enable-static=no
 USE_MMX=--disable-mmx
-SPPRIVATE=no
 
 
 #
@@ -44,6 +45,7 @@ SPPRIVATE=no
 #
 .PHONY: all
 all: sdl-all lua-all app
+
 
 
 #####
@@ -140,8 +142,6 @@ lua-all: lua tolua++ luasocket slnunicode luajson loop luaexpat luafilesystem lu
 # lua (requires readline ncurses)
 lua:
 	cd lua-5.1.5; make linux INSTALL_TOP=${PREFIX} && make install INSTALL_TOP=${PREFIX}
-	chmod 755 ${PREFIX}/lib/liblua.so
-	-rm -f ${PREFIX}/lib/liblua.a
 
 # luasocket (requires lua)
 luasocket: lua
@@ -199,14 +199,14 @@ tolua++: lua
 # squeezeplay
 #
 
-.PHONY: app fdkaac libogg flac libmad tremor squeezeplay squeezeplay_desktop freefont freefont-debian rtmp
-app: fdkaac libogg flac libmad tremor ${SPPRIVATE_TARGETS} squeezeplay squeezeplay_desktop freefont rtmp squeezeplay-tgz 
+.PHONY: app fdkaac libogg flac libmad tremor squeezeplay squeezeplay_desktop squeezeplay_contrib freefont freefont-debian rtmp
+app: fdkaac libogg flac libmad tremor ${SPPRIVATE_TARGETS} squeezeplay squeezeplay_desktop squeezeplay_contrib freefont rtmp squeezeplay-tgz 
 
-fdk-aac-2.0.2/Makefile:
-	cd fdk-aac-2.0.2; ./configure --prefix=${PREFIX} ${ENABLE_SHAREDLIBS}
+fdk-aac-2.0.1/Makefile:
+	cd fdk-aac-2.0.1; ./configure --prefix=${PREFIX} ${ENABLE_SHAREDLIBS}
 
-fdkaac: fdk-aac-2.0.2/Makefile
-	cd fdk-aac-2.0.2; make; make install
+fdkaac: fdk-aac-2.0.1/Makefile
+	cd fdk-aac-2.0.1; make; make install
 
 # libogg
 libogg-1.2.2/Makefile:
@@ -230,7 +230,7 @@ generated/${LIBMAD_DIR}/Makefile.am:
 	cd generated; tar -xzf ../${LIBMAD_DIR}.tar.gz
 
 generated/${LIBMAD_DIR}/Makefile: generated/${LIBMAD_DIR}/Makefile.am
-	cd generated/${LIBMAD_DIR}; ./configure --enable-fpm=arm --prefix=${PREFIX} ${ENABLE_SHAREDLIBS}
+	cd generated/${LIBMAD_DIR}; ./configure --prefix=${PREFIX} ${ENABLE_SHAREDLIBS}
 
 libmad: generated/${LIBMAD_DIR}/Makefile.am generated/${LIBMAD_DIR}/Makefile
 	cd generated/${LIBMAD_DIR}; make && make install
@@ -264,6 +264,10 @@ squeezeplay_desktop: squeezeplay_desktop/Makefile
 	chmod +x ${PREFIX}/bin/squeezeplay.sh
 	# cd /lib; tar -cf - libgcc_s\.* | (cd ${PREFIX}/lib; tar -xf -)
 	cd ${PREFIX} && patch -p1 -i ../../src/disable-server-version-check.patch
+
+squeezeplay_contrib: squeezeplay/Makefile
+	cd squeezeplay_contrib; make PREFIX=${PREFIX}
+
 
 # freefont
 freefont:
@@ -321,7 +325,7 @@ clean:
 	-cd luamd5; make MYNAME=sha1 clean
 	-cd luamd5; make MYNAME=md5 clean
 	-cd tolua++-1.0.92/src/lib; rm libtolua++.so; rm *.o
-	-cd fdk-aac-2.0.2; make distclean
+	-cd fdk-aac-2.0.1; make distclean
 	-cd libogg-1.2.2; make distclean
 	-cd Tremor; make distclean
 	-cd flac-1.2.1; make distclean; rm src/libFLAC++/flac++.pc; find . -type f -name Makefile -exec rm {} \; ; find . -type d -name '.deps' -exec rm -rf {} \;
