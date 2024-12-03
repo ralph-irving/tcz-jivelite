@@ -1,5 +1,18 @@
 #!/bin/sh
 
+#  Jivelite device detection and startup script.
+#    - Script handles all RasberryPi DSI touchscreens on RasberryPi boards
+#    - If you have an spi based screen that needs configuration.
+#      - Copy this script to /etc/sysconfig/tcedir/jivlite.sh
+#
+#
+#      - Insert screen startup related code
+
+
+
+#      - End screen related startup code
+#
+
 export LOG=/var/log/pcp_jivelite.log
 
 if [ -f /usr/local/etc/pcp/pcp.cfg ]; then
