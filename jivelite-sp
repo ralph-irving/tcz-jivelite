@@ -63,9 +63,9 @@ if [ ! -z ${SCREENROTATE} ]; then
     if [ "${DRIVER}" = "VC4" ]; then
         # Rotation CCW=270, UD=180, CW=90 degrees
         case "${SCREENROTATE}" in
-            90) export SDL_VIDEO_FBCON_ROTATION=CW;;
+            90) export SDL_VIDEO_FBCON_ROTATION=CCW;;
             180) export SDL_VIDEO_FBCON_ROTATION=UD;;
-            270) export SDL_VIDEO_FBCON_ROTATION=CCW;;
+            270) export SDL_VIDEO_FBCON_ROTATION=CW;;
             *) unset SDL_VIDEO_FBCON_ROTATION;;
         esac
     fi
