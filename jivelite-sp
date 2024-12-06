@@ -37,8 +37,8 @@ for LINE in $(cat $TMPFILE); do
             echo "Detected USB HID touchscreen driver, enabling multitouch driver." >> $LOG
             modprobe hid_multitouch
             sed -i 's/^# module debounce/module debounce/' /usr/local/etc/ts.conf
-            break
         fi
+        break
     fi
     udevadm info --query=property --path=$LINE | grep -q MOUSE
     [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=0;MOUSE=1
