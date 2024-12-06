@@ -25,24 +25,32 @@ MOUSE=0
 TMPFILE=$(mktemp)
 udevadm info --export-db | grep "P: " | grep "event" | sed 's/P: //' > $TMPFILE
 for LINE in $(cat $TMPFILE); do
-   udevadm info --query=property --path=$LINE | grep -q TOUCH
-   [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=1;MOUSE=0
-   if [ "$eventno" != "" ]; then
-      echo -e "Automatic touchscreen detection found input device on $eventno: \nDevice Info:" >> $LOG
-      udevadm info --query=all --path=${LINE%/*} >> $LOG
-      break
-   fi
-   udevadm info --query=property --path=$LINE | grep -q MOUSE
-   [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=0;MOUSE=1
-   [ "$eventno" != "" ] && echo "Found mouse: $eventno" >> $LOG && break
+    udevadm info --query=property --path=$LINE | grep -q TOUCH
+    [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=1;MOUSE=0
+    if [ "$eventno" != "" ]; then
+        echo -e "Automatic touchscreen detection found input device on $eventno: \nDevice Info:" >> $LOG
+        udevadm info --query=all --path=${LINE%/*} >> $LOG
+
+        # Recent USBHID touch screens require the multitouch driver
+        udevadm info --query=all --path=${LINE%/*} | grep -q "E: ID_USB_DRIVER=usbhid"
+        if [ $? -eq 0 ]; then
+            echo "Detected USB HID touchscreen driver, enabling multitouch driver." >> $LOG
+            modprobe hid_multitouch
+            sed -i 's/^# module debounce/module debounce/' /usr/local/etc/ts.conf
+            break
+        fi
+    fi
+    udevadm info --query=property --path=$LINE | grep -q MOUSE
+    [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=0;MOUSE=1
+    [ "$eventno" != "" ] && echo "Found mouse: $eventno" >> $LOG && break
 done
 rm -f $TMPFILE
 
 if [ x"" != x"$eventno" -a $TOUCH -eq 1 ]; then
-   export JIVE_NOCURSOR=1
-   export TSLIB_TSDEVICE=/dev/input/$eventno
-   export SDL_MOUSEDRV=TSLIB
-   export SDL_MOUSEDEV=$TSLIB_TSDEVICE
+    export JIVE_NOCURSOR=1
+    export TSLIB_TSDEVICE=/dev/input/$eventno
+    export SDL_MOUSEDRV=TSLIB
+    export SDL_MOUSEDEV=$TSLIB_TSDEVICE
 fi
 
 # Determine the driver being used.  (drm-rpi-dsadrmf is a pi5 which must use the vc4 driver)
