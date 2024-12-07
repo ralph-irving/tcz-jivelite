@@ -1,25 +1,87 @@
 #!/bin/sh
 
+#  Jivelite device detection and startup script.
+#    - Script handles all RasberryPi DSI touchscreens on RasberryPi boards
+#    - If you have an spi based screen that needs configuration.
+#      - Copy this script to /etc/sysconfig/tcedir/jivlite.sh
+#
+#
+#      - Insert screen startup related code
+
+
+
+#      - End screen related startup code
+#
+
 export LOG=/var/log/pcp_jivelite.log
 
 if [ -f /usr/local/etc/pcp/pcp.cfg ]; then
     source /usr/local/etc/pcp/pcp.cfg
-    if [ ! -z ${SCREENROTATE} ]; then
-        MODEL=$(busybox awk '/^Model/ { print $5 }' /proc/cpuinfo)
-        if [ "${MODEL}" == "5" ]; then
-            # Rotation CCW=270, UD=180, CW=90 degrees
-            if [ "${SCREENROTATE}" == "180" ]; then
-                export SDL_VIDEO_FBCON_ROTATION=UD
-                export TSLIB_CALIBFILE=/usr/local/etc/pointercal-r2
-                echo "Pi5 detected sdl screen rotation enabled." >> $LOG
-            fi
-        fi
-    fi	
 fi
 
+# Autodetect Touchscreen, and then mouse if no touch is found.
+TOUCH=0
+MOUSE=0
+TMPFILE=$(mktemp)
+udevadm info --export-db | grep "P: " | grep "event" | sed 's/P: //' > $TMPFILE
+for LINE in $(cat $TMPFILE); do
+    udevadm info --query=property --path=$LINE | grep -q TOUCH
+    [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=1;MOUSE=0
+    if [ "$eventno" != "" ]; then
+        echo -e "Automatic touchscreen detection found input device on $eventno: \nDevice Info:" >> $LOG
+        udevadm info --query=all --path=${LINE%/*} >> $LOG
+
+        # Recent USBHID touch screens require the multitouch driver
+        udevadm info --query=all --path=${LINE%/*} | grep -q "E: ID_USB_DRIVER=usbhid"
+        if [ $? -eq 0 ]; then
+            echo "Detected USB HID touchscreen driver, enabling multitouch driver." >> $LOG
+            modprobe hid_multitouch
+            sed -i 's/^# module debounce/module debounce/' /usr/local/etc/ts.conf
+        fi
+        break
+    fi
+    udevadm info --query=property --path=$LINE | grep -q MOUSE
+    [ $? -eq 0 ] && eventno=$(basename $LINE);TOUCH=0;MOUSE=1
+    [ "$eventno" != "" ] && echo "Found mouse: $eventno" >> $LOG && break
+done
+rm -f $TMPFILE
+
+if [ x"" != x"$eventno" -a $TOUCH -eq 1 ]; then
+    export JIVE_NOCURSOR=1
+    export TSLIB_TSDEVICE=/dev/input/$eventno
+    export SDL_MOUSEDRV=TSLIB
+    export SDL_MOUSEDEV=$TSLIB_TSDEVICE
+fi
+
+# Determine the driver being used.  (drm-rpi-dsadrmf is a pi5 which must use the vc4 driver)
 if [ ! -z ${JL_FRAME_BUFFER} ]; then
     export SDL_FBDEV=$JL_FRAME_BUFFER
     echo "Using $SDL_FBDEV as frame buffer device." >> $LOG
+
+    case $(cat /proc/fb | grep -E ^${JL_FRAME_BUFFER: -1} | cut -d' ' -f2) in
+        vc4drmfb|drm-rp1-dsidrmf) DRIVER="VC4";;
+        BCM2708) DRIVER="BCM2708";;
+        *) DRIVER="OTHER"
+    esac
+    echo "Detected framebuffer driver: $DRIVER" >> $LOG
+fi
+
+# Set software rotation if screen rotate is set and vc4 driver is being used.
+if [ ! -z ${SCREENROTATE} ]; then
+    if [ "${DRIVER}" = "VC4" ]; then
+        # Rotation CCW=270, UD=180, CW=90 degrees
+        case "${SCREENROTATE}" in
+            90) export SDL_VIDEO_FBCON_ROTATION=CCW;;
+            180) export SDL_VIDEO_FBCON_ROTATION=UD;;
+            270) export SDL_VIDEO_FBCON_ROTATION=CW;;
+            *) unset SDL_VIDEO_FBCON_ROTATION;;
+        esac
+    fi
+    if [ ! -z ${SDL_VIDEO_FBCON_ROTATION} ]; then
+        echo "SDL screen rotation set to $SDL_VIDEO_FBCON_ROTATION." >> $LOG
+    else
+        echo "No Screen rotation, or handled in firmware." >> $LOG
+    fi
 fi
 
 if [ -z ${JL_FRAME_RATE} ]; then
@@ -34,13 +96,15 @@ if [ -z ${JL_FRAME_DEPTH} ]; then
     JL_FRAME_DEPTH=32
 fi
 
-/usr/sbin/fbset -depth $JL_FRAME_DEPTH >> $LOG
- 
-echo "Frame buffer color bit depth set to $JL_FRAME_DEPTH." >> $LOG
-
-if [ ! -z ${SDL_TOUCHSCREEN} ]; then
-    export JIVE_NOCURSOR=1
+if [ ${DRIVER} != "VC4" ]; then
+    /usr/sbin/fbset -depth $JL_FRAME_DEPTH >> $LOG
+else
+    case "${SCREENROTATE}" in
+        0) break;;
+        *) JL_FRAME_DEPTH=16;;
+    esac
 fi
+echo "Frame buffer color bit depth set to $JL_FRAME_DEPTH." >> $LOG
 
 export HOME=/home/tc
 
