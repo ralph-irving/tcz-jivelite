@@ -15,6 +15,13 @@
 
 export LOG=/var/log/pcp_jivelite.log
 
+#Variables coming from pcp.cfg
+# SCREENROTATE
+# HARDWARE_ROT
+# JL_FRAME_RATE
+# JL_FRAME_DEPTH
+# JL_FRAME_BUFFER
+
 if [ -f /usr/local/etc/pcp/pcp.cfg ]; then
     source /usr/local/etc/pcp/pcp.cfg
 fi
@@ -77,10 +84,12 @@ if [ ! -z ${SCREENROTATE} ]; then
             *) unset SDL_VIDEO_FBCON_ROTATION;;
         esac
     fi
+    [ "${HARDWARE_ROT}" = "yes" ] && unset SDL_VIDEO_FBCON_ROTATION
+
     if [ ! -z ${SDL_VIDEO_FBCON_ROTATION} ]; then
         echo "SDL screen rotation set to $SDL_VIDEO_FBCON_ROTATION." >> $LOG
     else
-        echo "No Screen rotation, or handled in firmware." >> $LOG
+        echo "No SDL Screen rotation, or handled in hardware/drivers." >> $LOG
     fi
 fi
 
@@ -99,10 +108,7 @@ fi
 if [ ${DRIVER} != "VC4" ]; then
     /usr/sbin/fbset -depth $JL_FRAME_DEPTH >> $LOG
 else
-    case "${SCREENROTATE}" in
-        0) break;;
-        *) JL_FRAME_DEPTH=16;;
-    esac
+    [ "${HARDARE_ROT}" = "yes" ] || JL_FRAME_DEPTH=16
 fi
 echo "Frame buffer color bit depth set to $JL_FRAME_DEPTH." >> $LOG
 
