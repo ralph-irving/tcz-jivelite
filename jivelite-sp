@@ -38,10 +38,10 @@ for LINE in $(cat $TMPFILE); do
         echo -e "Automatic touchscreen detection found input device on $eventno: \nDevice Info:" >> $LOG
         udevadm info --query=all --path=${LINE%/*} >> $LOG
 
-        # Recent USBHID touch screens require the multitouch driver
-        udevadm info --query=all --path=${LINE%/*} | grep -q "E: ID_USB_DRIVER=usbhid"
+        # Some touchpanels need multitouch (known: MPI7003)
+        udevadm info --query=all --path=${LINE%/*} | grep -q "MPI7003"
         if [ $? -eq 0 ]; then
-            echo "Detected USB HID touchscreen driver, enabling multitouch driver." >> $LOG
+            echo "Detected touchscreen driver requiring multitouch, enabling driver..." >> $LOG
             modprobe hid_multitouch
             sed -i 's/^# module debounce/module debounce/' /usr/local/etc/ts.conf
         fi
