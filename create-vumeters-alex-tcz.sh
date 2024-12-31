@@ -58,7 +58,7 @@ while true; do
     echo -e "Copying-policy:\tPublic Domain" >> "${tcz[$i]}.info"
     echo -e "Size:\t\t$(ls -lk ${tcz[$i]} | awk '{print $5}')" >> "${tcz[$i]}.info"
     echo -e "Extension_by:\tpiCorePlayer team: https://www.picoreplayer.org/" >> "${tcz[$i]}.info"
-    echo -e "\t\tPackaged for piCore 14.x" >> "${tcz[$i]}.info"
+    echo -e "\t\tPackaged for piCore 15.x" >> "${tcz[$i]}.info"
 
     i=`expr ${i} + 1`
 done

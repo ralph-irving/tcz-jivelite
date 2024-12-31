@@ -172,7 +172,7 @@ echo -e "Original-site:\thttp://www.lua.org/" >> $LUATCZINFO
 echo -e "Copying-policy:\tMIT http://www.lua.org/license.html" >> $LUATCZINFO
 echo -e "Size:\t\t$(ls -lk $LUATCZ | awk '{print $5}')" >> $LUATCZINFO
 echo -e "Extension_by:\tpiCorePlayer team: http://www.picoreplayer.org/" >> $LUATCZINFO
-echo -e "\t\tCompiled for piCore 14.x" >> $LUATCZINFO
+echo -e "\t\tCompiled for piCore 15.x" >> $LUATCZINFO
 
 ./split-jivelite-tcz.sh
 
@@ -185,7 +185,7 @@ echo -e "Original-site:\t$(grep url $SRC/.git/config | awk '{print $3}')" >> $TC
 echo -e "Copying-policy:\tGPLv3" >> $TCZINFO
 echo -e "Size:\t\t$(ls -lk pcp-$JIVELITE.tcz | awk '{print $5}')" >> $TCZINFO
 echo -e "Extension_by:\tpiCorePlayer team: http://www.picoreplayer.org/" >> $TCZINFO
-echo -e "\t\tCompiled for piCore 14.x" >> $TCZINFO
+echo -e "\t\tCompiled for piCore 15.x" >> $TCZINFO
 
 ./create-vumeters-tcz.sh
 
