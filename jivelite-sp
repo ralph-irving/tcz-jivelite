@@ -108,7 +108,7 @@ fi
 if [ ${DRIVER} != "VC4" ]; then
     /usr/sbin/fbset -depth $JL_FRAME_DEPTH >> $LOG
 else
-    [ "${HARDARE_ROT}" = "yes" ] || JL_FRAME_DEPTH=16
+    [ "${HARDWARE_ROT}" = "yes" ] || JL_FRAME_DEPTH=16
 fi
 echo "Frame buffer color bit depth set to $JL_FRAME_DEPTH." >> $LOG
 
