@@ -22,6 +22,14 @@ image[10]=vu_analog_25seq_speaker2.png
 tcz[10]=VU_Meter_Alex_Speaker2.tcz
 image[11]=vu_analog_25seq_speaker3.png
 tcz[11]=VU_Meter_Alex_Speaker3.tcz
+image[12]=vu_analog_25seq_seg5.png
+tcz[12]=VU_Meter_Alex_Segments5.tcz
+image[13]=vu_analog_25seq_disco-rotate.png
+tcz[13]=VU_Meter_Alex_DiscoRotate.tcz
+image[14]=vu_analog_25seq_disco-still.png
+tcz[14]=VU_Meter_Alex_DiscoStill.tcz
+image[15]=vu_analog_25seq_concept1.png
+tcz[15]=VU_Meter_Alex_Concept1.tcz
 
 i=1
 while true; do
@@ -54,7 +62,7 @@ while true; do
     echo -e "Version:\t8.0.0" >> "${tcz[$i]}.info"
     echo -e "Commit:\t\t$(git show | grep commit | awk '{print $2}')" >> "${tcz[$i]}.info"
     echo -e "Author:\t\tAlexander Aust" >> "${tcz[$i]}.info"
-    echo -e "Original-site:\thttps://forums.slimdevices.com" >> "${tcz[$i]}.info"
+    echo -e "Original-site:\thttps://forums.lyrion.org" >> "${tcz[$i]}.info"
     echo -e "Copying-policy:\tPublic Domain" >> "${tcz[$i]}.info"
     echo -e "Size:\t\t$(ls -lk ${tcz[$i]} | awk '{print $5}')" >> "${tcz[$i]}.info"
     echo -e "Extension_by:\tpiCorePlayer team: https://www.picoreplayer.org/" >> "${tcz[$i]}.info"
